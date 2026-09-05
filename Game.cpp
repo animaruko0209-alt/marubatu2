@@ -64,33 +64,33 @@ void Game::Game_loop()
 		current_scene_ptr->Update();
 
 
-		int next = current_scene_ptr->GetNextScene();
-		if (next != -1)
-		{
-			// shared_ptr に置き換えたので delete は不要
-			scene_no = next;
+	//	int next = current_scene_ptr->GetNextScene();
+		//if (next != -1)
+		//{
+		//	// shared_ptr に置き換えたので delete は不要
+		//	scene_no = next;
 
-			InitGraph();
+		//	InitGraph();
 
-			switch (scene_no)
-			{
-			case 0:
+		//	switch (scene_no)
+		//	{
+		//	case 0:
 
-				break;
-			case 1:
+		//		break;
+		//	case 1:
 
-				break;
-			case 2:
+		//		break;
+		//	case 2:
 
-				break;
-			case 3:
+		//		break;
+		//	case 3:
 
-				break;
-			}
+		//		break;
+		//	}
 
 
-			continue;  // ← 新しいシーンのループを最初から実行
-		}
+		//	continue;  // ← 新しいシーンのループを最初から実行
+		//}
 
 		// =======================================
 		//  描画処理

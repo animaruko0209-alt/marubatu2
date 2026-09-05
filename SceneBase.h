@@ -32,6 +32,6 @@ public:
 	/// </summary>
 	virtual void Sound_play() = 0;
 
-	int GetNextScene() const { return next_scene; }
+	//int GetNextScene() const { return next_scene; }
 };
 

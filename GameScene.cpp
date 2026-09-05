@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "DxLib.h"
 
 void GameScene::Init()
 {
@@ -17,6 +18,9 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	// •`‰æˆ—
+
+	
+
 }
 
 void GameScene::Sound_play()
