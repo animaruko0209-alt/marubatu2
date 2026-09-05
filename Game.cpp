@@ -1,5 +1,6 @@
 #include "DxLib.h"
-
+#include"Game.h"
+#include"SceneBase.h"
 #include <memory>
 #include <ctime>
 
