@@ -13,7 +13,7 @@ void Game::Game_loop()
 
 	scene_no = 0;
 
-	// シーンベース型へのスマートポインタ変数に各シーン型のインスタンスをセット
+	
 	switch (this->scene_no) {
 
 	case 0:
