@@ -10,9 +10,9 @@
 
 //	定数の宣言
 
-#define WINDOW_W 780	// 画面サイズ　横
+#define WINDOW_W 800	// 画面サイズ　横
 
-#define WINDOW_H 720	// 画面サイズ　縦
+#define WINDOW_H 750	// 画面サイズ　縦
 
 // ------------------------------
 // WinMain
