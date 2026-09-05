@@ -11,6 +11,8 @@
 void Game::Game_loop()
 {
 
+	current_scene_ptr = new GameScene();
+
 	scene_no = 0;
 
 	
