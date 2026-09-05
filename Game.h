@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SceneBase.h"
 #include <memory>
 #include"Dxlib.h"
 
