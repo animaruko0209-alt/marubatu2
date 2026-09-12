@@ -32,10 +32,10 @@ void GameScene::Draw()
 		}
 
 		// â°ê¸
-		DrawLine(50, 50 + i * 110, 710, 50 + i * 110, GetColor(r, g, b), 2);
+		DrawLine(170, 170 + i * 110, 830, 170 + i * 110, GetColor(r, g, b), 2);
 
 		
-		DrawLine(50 + i * 110, 50, 50 + i * 110, 710, GetColor(r, g, b), 2);
+		DrawLine(170 + i * 110, 170, 170 + i * 110, 830, GetColor(r, g, b), 2);
 	}
 
 }

@@ -1,17 +1,22 @@
 #pragma once
 
+#include "SceneBase.h"
 #include "Dxlib.h"
 
-class CircleMove
+class CircleMove : public SceneBase
 {
-	public:
- 
-    void Update();
-    void Draw();
 
 private:
     float x;
     float y;
 
     float speed;
+
+public:
+		CircleMove(){}
+    void Init() override;
+    void Input() override;
+    void Update() override;
+    void Draw() override;
+	void Sound_play() override;
 };
