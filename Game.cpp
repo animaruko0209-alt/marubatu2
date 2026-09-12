@@ -13,7 +13,7 @@ void Game::Game_loop()
 {
 
 	current_scene_ptr = new GameScene();
-
+	current_scene_ptr->Init();
 	scene_no = 0;
 
 	

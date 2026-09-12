@@ -7,6 +7,8 @@ class CircleMove : public SceneBase
 {
 public:
 
+    int circle_image;
+
     struct Circle_g {
         int image;
         float x;

@@ -8,6 +8,8 @@ class GameScene : public SceneBase
 
 	CircleMove circlemove;
 
+	int circle_image;
+
 	struct Line_color {
 		int r;
 		int g;

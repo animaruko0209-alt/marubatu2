@@ -6,6 +6,7 @@ void GameScene::Init()
 	// ‰Šú‰»ˆ—
 	m_lineColor = { 255, 255, 255 };
 	circlemove.Init();
+
 }
 void GameScene::Input()
 {
