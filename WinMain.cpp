@@ -38,7 +38,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
 	// ウィンドウのタイトル
 
-	SetMainWindowText("コマンドシューティング");
+	SetMainWindowText("マルバツゲーム");
 
 	// 背景色の設定
 

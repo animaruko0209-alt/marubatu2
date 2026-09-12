@@ -3,7 +3,21 @@
 
 class GameScene : public SceneBase
 {
-public:
+
+
+#define LINE_NUM	7
+
+	struct Line_color {
+		int r;
+		int g;
+		int b;
+	};
+
+	Line_color m_lineColor;
+
+	public:
+
+
 	GameScene() {}
 
 	void Init() override;
@@ -11,4 +25,5 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Sound_play() override;
+
 };
