@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include"Game.h"
 #include"SceneBase.h"
+#include "CircleMove.h"
 #include <memory>
 #include <ctime>
 
@@ -54,6 +55,8 @@ void Game::Game_loop()
 		// ‰æ–Êã‚Ì•`‰æ‚ğ‰Šú‰»i‰æ–Ê‚ğÁ‹j
 
 		ClearDrawScreen();
+
+
 
 		// =======================================
 		//  “ü—Íˆ—

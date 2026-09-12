@@ -1,11 +1,12 @@
 #pragma once
 #include "SceneBase.h"
+#include "CircleMove.h"
 
 class GameScene : public SceneBase
 {
-
-
 #define LINE_NUM	7
+
+	CircleMove circlemove;
 
 	struct Line_color {
 		int r;

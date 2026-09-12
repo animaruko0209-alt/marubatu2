@@ -7,6 +7,9 @@ class Game
 {
 	int scene_no = 0;
 
+	int NowMouseX = 0;
+	int NowMouseY = 0;
+
 	//std::shared_ptr<SceneBase> current_scene_ptr = nullptr;
 
 	GameScene* current_scene_ptr = nullptr;
