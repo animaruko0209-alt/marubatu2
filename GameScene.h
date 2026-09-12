@@ -4,11 +4,25 @@
 
 class GameScene : public SceneBase
 {
-#define LINE_NUM	7
+
 
 	CircleMove circlemove;
 
-	int circle_image;
+public:
+
+
+#define LINE_NUM	7
+#define LINE_WIDTH	110
+
+
+	enum PieceType
+	{
+		NONE,
+		G_PIECE,	// ècâ°Ç…ìÆÇ≠ãÓ
+		O_PIECE		// éŒÇﬂÇ…ìÆÇ≠ãÓ
+	};
+
+	PieceType m_cell[6][6];
 
 	struct Line_color {
 		int r;
@@ -16,12 +30,28 @@ class GameScene : public SceneBase
 		int b;
 	};
 
+	struct Line_position {
+		int x1;
+		int y1;
+		int x2;
+		int y2;
+	};
+
+	struct Line_position2 {
+		int x1;
+		int y1;
+		int x2;
+		int y2;
+	};
+
+
 	Line_color m_lineColor;
 
-	public:
+	Line_position m_linePosition[LINE_NUM];
+
+	Line_position m_linePosition2[LINE_NUM];
 
 
-	GameScene() {}
 
 	void Init() override;
 	void Input() override;
