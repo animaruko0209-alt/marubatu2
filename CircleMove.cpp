@@ -11,7 +11,10 @@ void CircleMove::Init()
 
 void CircleMove::Input()
 {
-
+	if(CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		g_circle.x += 50;
+	}
 
 }
 
@@ -21,7 +24,7 @@ void CircleMove::Update()
 
 void CircleMove::Draw()
 {
-	DrawGraph(0, 0, o_circle.image, true);
+	DrawGraph(o_circle.x, o_circle.y, o_circle.image, true);
 	DrawGraph(g_circle.x, g_circle.y, g_circle.image, true);
 
 }
