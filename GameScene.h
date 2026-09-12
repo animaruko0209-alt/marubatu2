@@ -24,6 +24,8 @@ public:
 
 	PieceType m_cell[6][6];
 
+	PieceType m_selectedPiace;
+
 	struct Line_color {
 		int r;
 		int g;

@@ -20,11 +20,24 @@ void GameScene::Init()
 		}
 	}
 
+	m_selectedPiace = G_PIECE;
+
 	circlemove.Init();
 
 }
 void GameScene::Input()
 {
+
+	if (CheckHitKey(KEY_INPUT_G))
+	{
+		m_selectedPiace = G_PIECE;
+	}
+	else if (CheckHitKey(KEY_INPUT_O))
+	{
+		m_selectedPiace = O_PIECE;
+	}
+
+
 	// 入力処理
 	circlemove.Input();
 }
@@ -51,8 +64,8 @@ void GameScene::Update()
 			// 何行目か
 			int cellY = (mouseY - 170) / LINE_WIDTH;
 
-			//// そのマスに画像を置く
-			m_cell[cellY][cellX] = O_PIECE;
+			// そのマスに画像を置く
+			m_cell[cellY][cellX] = m_selectedPiace;
 		}
 	}
 }
