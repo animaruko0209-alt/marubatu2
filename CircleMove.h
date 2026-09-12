@@ -21,6 +21,16 @@ public:
         float y;
     };
 
+    enum CircleState {
+        STATE_AVAILABLE,
+        STATE_NOT_AVAILABLE
+	};
+
+    enum CircleMoveType {
+		LR, // Left to Right
+		VH // Vertical Horizontal
+    };
+
     Circle_g g_circle;
     Circle_o o_circle;
 
