@@ -93,11 +93,30 @@ void GameScene::Update()
 
 					m_currentPlayer = PLAYER_BATU;
 
+					if (m_selectedPiace == MARU_G)
+					{
+						m_selectedPiace = BATU_G;
+					}
+					
+					else if (m_selectedPiace == MARU_O)
+					{
+						m_selectedPiace = BATU_O;
+					}
+
 				}
 				else if (m_currentPlayer == PLAYER_BATU)
 				{
 					m_currentPlayer = PLAYER_MARU;
-
+				
+					if (m_selectedPiace == BATU_G)
+					{
+						m_selectedPiace = MARU_G;
+					}
+				
+					else if (m_selectedPiace == BATU_O)
+					{
+						m_selectedPiace = MARU_O;
+					}
 				}
 			}
 
