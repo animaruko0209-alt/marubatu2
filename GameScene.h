@@ -8,6 +8,8 @@ class GameScene : public SceneBase
 
 	CircleMove circlemove;
 
+	bool m_prevMouseLeft;
+
 public:
 
 
@@ -18,13 +20,22 @@ public:
 	enum PieceType
 	{
 		NONE,
-		G_PIECE,	// c‰¡‚É“®‚­‹î
-		O_PIECE		// Î‚ß‚É“®‚­‹î
+		MARU_G,		// ‚Ü‚é‚Ìc‰¡‚É“®‚­‹î
+		MARU_O,		// ‚Ü‚é‚ÌÎ‚ß‚É“®‚­‹î
+		BATU_G,		// ‚Î‚Â‚Ìc‰¡‚É“®‚­‹î
+		BATU_O		// ‚Î‚Â‚ÌÎ‚ß‚É“®‚­‹î
 	};
 
 	PieceType m_cell[6][6];
-
 	PieceType m_selectedPiace;
+
+	enum Player {
+		PLAYER_MARU,
+		PLAYER_BATU
+	};
+
+	Player m_currentPlayer;
+
 
 	struct Line_color {
 		int r;
@@ -45,7 +56,6 @@ public:
 		int x2;
 		int y2;
 	};
-
 
 	Line_color m_lineColor;
 

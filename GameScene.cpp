@@ -20,7 +20,11 @@ void GameScene::Init()
 		}
 	}
 
-	m_selectedPiace = G_PIECE;
+	m_selectedPiace = MARU_G;
+
+	m_currentPlayer = PLAYER_MARU;
+
+	m_prevMouseLeft = false;
 
 	circlemove.Init();
 
@@ -28,13 +32,26 @@ void GameScene::Init()
 void GameScene::Input()
 {
 
-	if (CheckHitKey(KEY_INPUT_G))
-	{
-		m_selectedPiace = G_PIECE;
+	//　駒の種類の変更処理
+	if (m_currentPlayer == PLAYER_MARU) {
+		if (CheckHitKey(KEY_INPUT_G))
+		{
+			m_selectedPiace = MARU_G;
+		}
+		else if (CheckHitKey(KEY_INPUT_O))
+		{
+			m_selectedPiace = MARU_O;
+		}
 	}
-	else if (CheckHitKey(KEY_INPUT_O))
-	{
-		m_selectedPiace = O_PIECE;
+	else if (m_currentPlayer == PLAYER_BATU) {
+		if (CheckHitKey(KEY_INPUT_G))
+		{
+			m_selectedPiace = BATU_G;
+		}
+		else if (CheckHitKey(KEY_INPUT_O))
+		{
+			m_selectedPiace = BATU_O;
+		}
 	}
 
 
@@ -46,13 +63,15 @@ void GameScene::Update()
 {
 	// 更新処理
 	circlemove.Update();	
+
+	bool mouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
 	int mouseX;
 	int mouseY;
 
 	GetMousePoint(&mouseX, &mouseY);
 
 	// 左クリック
-	if (GetMouseInput() & MOUSE_INPUT_LEFT)
+	if (mouseLeft && !m_prevMouseLeft )
 	{
 		// 格子の中にいるか
 		if (mouseX >= 170 && mouseX < 830 &&
@@ -64,10 +83,30 @@ void GameScene::Update()
 			// 何行目か
 			int cellY = (mouseY - 170) / LINE_WIDTH;
 
-			// そのマスに画像を置く
-			m_cell[cellY][cellX] = m_selectedPiace;
+
+			if (m_cell[cellY][cellX] == NONE) {
+				// そのマスに画像を置く
+				m_cell[cellY][cellX] = m_selectedPiace;
+
+				if (m_currentPlayer == PLAYER_MARU)
+				{
+
+					m_currentPlayer = PLAYER_BATU;
+
+				}
+				else if (m_currentPlayer == PLAYER_BATU)
+				{
+					m_currentPlayer = PLAYER_MARU;
+
+				}
+			}
+
+
 		}
+
 	}
+	m_prevMouseLeft = mouseLeft;
+
 }
 
 void GameScene::Draw()
@@ -98,14 +137,20 @@ void GameScene::Draw()
 		for (int x = 0; x < 6; x++)
 		{
 			
-				int drawX = 170 + x * LINE_WIDTH;
-				int drawY = 170 + y * LINE_WIDTH;
+				int drawX = 175 + x * LINE_WIDTH;
+				int drawY = 175 + y * LINE_WIDTH;
 
-				if (m_cell[y][x] == G_PIECE) {
-					circlemove.DrawG(drawX, drawY);
+				if (m_cell[y][x] == MARU_G) {
+					circlemove.DrawMaruG(drawX, drawY);
 				}
-				else if (m_cell[y][x] == O_PIECE) {
-					circlemove.DrawO(drawX, drawY);
+				else if (m_cell[y][x] == MARU_O) {
+					circlemove.DrawMaruO(drawX, drawY);
+				}
+				else if (m_cell[y][x] == BATU_G) {
+					circlemove.DrawBatuG(drawX, drawY);
+				}
+				else if (m_cell[y][x] == BATU_O) {
+					circlemove.DrawBatuO(drawX, drawY);
 				}
 			
 		}

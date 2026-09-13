@@ -17,9 +17,6 @@ public:
     //    DIAGONAL  // ŽÎ‚ß
     //};
 
-
-    int circle_image;
-
     struct Circle_g {
         int image;
         float x;
@@ -34,9 +31,23 @@ public:
 		//CircleMoveType move_type;
     };
 
+	struct Batu_g {
+		int image;
+		float x;
+		float y;
+	};
+
+	struct Batu_o {
+		int image;
+		float x;
+		float y;
+	};
+
 
     Circle_g g_circle;
     Circle_o o_circle;
+	Batu_g g_batu;
+    Batu_o o_batu;
 
 
     bool CanMoveCross(int dx, int dy);
@@ -45,7 +56,9 @@ public:
     void Input() override;
     void Update() override;
     void Draw() override;
-	void DrawG(int x, int y);
-	void DrawO(int x, int y);
+	void DrawMaruG(int x, int y);
+	void DrawMaruO(int x, int y);
+    void DrawBatuG(int x, int y);
+	void DrawBatuO(int x, int y);
 	void Sound_play() override;
 };

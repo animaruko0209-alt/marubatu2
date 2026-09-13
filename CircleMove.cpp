@@ -26,11 +26,8 @@ void CircleMove::Init()
 {
     o_circle.image = LoadGraph("o_maru.png");
     g_circle.image = LoadGraph("g_maru.png");
-
-  /*  g_circle.x = 175;
-    g_circle.y = 175;
-    o_circle.x = 395;
-    o_circle.y = 175;*/
+	o_batu.image = LoadGraph("o_batu.png");
+	g_batu.image = LoadGraph("g_batu.png");
 }
 
 void CircleMove::Input()
@@ -49,14 +46,24 @@ void CircleMove::Draw()
 
 }
 
-void CircleMove::DrawG(int x, int y)
+void CircleMove::DrawMaruG(int x, int y)
 {
 	DrawGraph(x, y, g_circle.image, true);
 }
 
-void CircleMove::DrawO(int x, int y)
+void CircleMove::DrawMaruO(int x, int y)
 {
 	DrawGraph(x, y, o_circle.image, true);
+}
+
+void CircleMove::DrawBatuG(int x, int y)
+{
+	DrawGraph(x, y, g_batu.image, true);
+}
+
+void CircleMove::DrawBatuO(int x, int y)
+{
+	DrawGraph(x, y, o_batu.image, true);
 }
 
 void CircleMove::Sound_play()
