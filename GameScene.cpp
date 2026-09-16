@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "DxLib.h"
+#include"Mouse.h"
 
 void GameScene::Init()
 {
@@ -285,9 +286,15 @@ void GameScene::Draw()
 				else if (m_cell[y][x] == BATU_O) {
 					circlemove.DrawBatuO(drawX, drawY);
 				}
-			
+				
+				if (IsMouseAuto) {
+					if (m_cell[y][x]) {
+						DrawLineBox(drawX, drawY, drawX + 110, drawY + 110, GetColor(255, 255, 0));
+					}
+				}
 		}
 	}
+
 
 }
 
