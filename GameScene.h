@@ -57,13 +57,22 @@ public:
 		int y2;
 	};
 
+	//　線の色を格納する変数
 	Line_color m_lineColor;
 
+	//　線の位置を格納する配列
 	Line_position m_linePosition[LINE_NUM];
-
 	Line_position m_linePosition2[LINE_NUM];
 
+	//　マルとバツの駒の数をカウントする変数
+	int m_maruCount;
+	int m_batuCount;
 
+	//　選択中の駒の座標を格納する変数
+	int m_selectedX;
+	int m_selectedY;
+	//　駒が移動中かどうかを判定する変数
+	bool m_pieceMoving;
 
 	void Init() override;
 	void Input() override;
