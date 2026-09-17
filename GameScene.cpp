@@ -71,6 +71,50 @@ void GameScene::Input()
 	circlemove.Input();
 }
 
+bool GameScene::CanMove(int destX, int destY)
+{
+	if (destX < 0 || destX >= 6 ||
+		destY < 0 || destY >= 6) {
+		return false;
+	}
+
+
+	if (m_cell[destY][destX] != NONE) {
+		return false;
+	}
+
+	int dx = destX - m_selectedX;
+	int dy = destY - m_selectedY;
+
+	int piece = m_cell[m_selectedY][m_selectedX];
+
+
+	if (piece == MARU_G || piece == BATU_G) {
+
+		if (dx != 0 && dy != 0) {
+			return false;
+		}
+
+		return true;
+	}
+
+	if (piece == MARU_O || piece == BATU_O) {
+		if (abs(dx) != abs(dy)) {
+			return false;
+		}
+
+		if (dx == 0)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+
 void GameScene::Update()
 {
 	// XVˆ—
@@ -189,7 +233,7 @@ void GameScene::Update()
 			else
 			{
 				// ˆÚ“®æ‚ª‹ó‚¢‚Ä‚¢‚é‚©
-				if (m_cell[cellY][cellX] == NONE)
+				if (CanMove(cellX,cellY))
 				{
 					// ‹î‚ğˆÚ“®
 					m_cell[cellY][cellX] =
@@ -237,8 +281,11 @@ void GameScene::Update()
 		}
 	}
 
+
 	m_prevMouseLeft = mouseLeft;
 }
+
+
 
 void GameScene::Draw()
 {
@@ -287,11 +334,7 @@ void GameScene::Draw()
 					circlemove.DrawBatuO(drawX, drawY);
 				}
 				
-				if (IsMouseAuto) {
-					if (m_cell[y][x]) {
-						DrawLineBox(drawX, drawY, drawX + 110, drawY + 110, GetColor(255, 255, 0));
-					}
-				}
+			
 		}
 	}
 

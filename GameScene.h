@@ -10,6 +10,8 @@ class GameScene : public SceneBase
 
 	bool m_prevMouseLeft;
 
+	bool CanMove(int destX, int destY);
+
 public:
 
 
