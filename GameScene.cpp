@@ -73,13 +73,10 @@ void GameScene::Input()
 
 bool GameScene::CanMove(int destX, int destY)
 {
+	// 盤面外なら移動できない
 	if (destX < 0 || destX >= 6 ||
-		destY < 0 || destY >= 6) {
-		return false;
-	}
-
-
-	if (m_cell[destY][destX] != NONE) {
+		destY < 0 || destY >= 6)
+	{
 		return false;
 	}
 
@@ -89,21 +86,98 @@ bool GameScene::CanMove(int destX, int destY)
 	int piece = m_cell[m_selectedY][m_selectedX];
 
 
-	if (piece == MARU_G || piece == BATU_G) {
-
-		if (dx != 0 && dy != 0) {
+	// =================================
+	// Gの駒（縦・横移動）
+	// =================================
+	if (piece == MARU_G || piece == BATU_G)
+	{
+		// 縦横以外には移動できない
+		if (dx != 0 && dy != 0)
+		{
 			return false;
 		}
 
-		return true;
+		// 同じ場所には移動できない
+		if (dx == 0 && dy == 0)
+		{
+			return false;
+		}
+
+
+		// 移動方向を決める
+		int stepX = 0;
+		int stepY = 0;
+
+		if (dx > 0)
+		{
+			stepX = 1;
+		}
+		else if (dx < 0)
+		{
+			stepX = -1;
+		}
+
+		if (dy > 0)
+		{
+			stepY = 1;
+		}
+		else if (dy < 0)
+		{
+			stepY = -1;
+		}
+
+
+		// 選択した駒の次のマスから調べる
+		int x = m_selectedX + stepX;
+		int y = m_selectedY + stepY;
+
+		while (x >= 0 && x < 6 &&
+			y >= 0 && y < 6)
+		{
+			// 駒を見つけた
+			if (m_cell[y][x] != NONE)
+			{
+				// 駒の1マス手前
+				int stopX = x - stepX;
+				int stopY = y - stepY;
+
+				// その場所なら移動OK
+				return destX == stopX && destY == stopY;
+			}
+
+			// クリックした場所まで来た
+			if (x == destX && y == destY)
+			{
+				return true;
+			}
+
+			x += stepX;
+			y += stepY;
+		}
+
+		return false;
 	}
 
-	if (piece == MARU_O || piece == BATU_O) {
-		if (abs(dx) != abs(dy)) {
+
+	// =================================
+	// Oの駒（斜め移動）
+	// =================================
+	if (piece == MARU_O || piece == BATU_O)
+	{
+		// 斜めになっているか確認
+		if (abs(dx) != abs(dy))
+		{
 			return false;
 		}
 
+		// 同じ場所には移動できない
 		if (dx == 0)
+		{
+			return false;
+		}
+
+		// 移動先に駒があれば移動できない
+		if (m_cell[destY][destX] != NONE)
 		{
 			return false;
 		}
@@ -113,7 +187,6 @@ bool GameScene::CanMove(int destX, int destY)
 
 	return false;
 }
-
 
 void GameScene::Update()
 {
