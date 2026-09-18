@@ -2,6 +2,7 @@
 
 #include "SceneBase.h"
 #include "Dxlib.h"
+#include"Piece.h"
 
 class CircleMove : public SceneBase
 {
@@ -50,15 +51,17 @@ public:
     Batu_o o_batu;
 
 
-    bool CanMoveCross(int dx, int dy);
-	bool CanMoveDiagonal(int dx, int dy);
     void Init() override;
     void Input() override;
     void Update() override;
     void Draw() override;
-	void DrawMaruG(int x, int y);
-	void DrawMaruO(int x, int y);
-    void DrawBatuG(int x, int y);
-	void DrawBatuO(int x, int y);
+	
+
+    // ‹î‚ÌŽí—Þ‚É‚æ‚Á‚ÄˆÚ“®‚Å‚«‚é•ûŒü‚©”»’è
+    bool CanMove(PieceType piece, int dx, int dy);
+
+    // ‹î‚ð•`‰æ
+    void DrawPiece(PieceType piece, int x, int y);
+
 	void Sound_play() override;
 };

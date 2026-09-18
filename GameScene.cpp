@@ -1,420 +1,314 @@
 #include "GameScene.h"
 #include "DxLib.h"
-#include"Mouse.h"
 
 void GameScene::Init()
 {
-	// 初期化処理
-	m_lineColor = { 255, 255, 255 };
-	
-	for (int i = 0; i < LINE_NUM; i++)
-	{
-		//　線の位置を設定
-		m_linePosition[i] = { 170, 170, 830, 170 };
-		m_linePosition2[i] = { 170, 170, 170, 830 };
-	}
+	m_lineColor = GetColor(255, 255, 255);
 
-	for (int y = 0; y < LINE_NUM - 1; y++)
-	{
-		for (int x = 0; x < LINE_NUM - 1; x++)
-		{
-			//　駒の種類を初期化
-			m_cell[y][x] = NONE;
-		}
-	}
-	//　初期選択駒をマルの縦横に動く駒に設定
-	m_selectedPiace = MARU_G;
-	//　初期プレイヤーをマルに設定
+	// 盤面初期化
+	m_board.Init();
+
+	// 駒初期化
+	m_circleMove.Init();
+
+	// プレイヤー
 	m_currentPlayer = PLAYER_MARU;
-	//　マウスの左クリックの状態を初期化
+
+	// 最初に選択されている駒
+	m_selectedPiece = MARU_G;
+
+	// マウス
 	m_prevMouseLeft = false;
 
-	//　マルとバツの駒の数を初期化
+	// 駒数
 	m_maruCount = 0;
 	m_batuCount = 0;
 
+	// 選択位置
 	m_selectedX = -1;
 	m_selectedY = -1;
 
+	// 移動中か
 	m_pieceMoving = false;
-
-	circlemove.Init();
-
 }
+
 void GameScene::Input()
 {
-
-	//　駒の種類の変更処理
-	if (m_currentPlayer == PLAYER_MARU) {
+	// G / Oの選択
+	if (m_currentPlayer == PLAYER_MARU)
+	{
 		if (CheckHitKey(KEY_INPUT_G))
 		{
-			m_selectedPiace = MARU_G;
+			m_selectedPiece = MARU_G;
 		}
-		else if (CheckHitKey(KEY_INPUT_O))
+
+		if (CheckHitKey(KEY_INPUT_O))
 		{
-			m_selectedPiace = MARU_O;
+			m_selectedPiece = MARU_O;
 		}
 	}
-	else if (m_currentPlayer == PLAYER_BATU) {
+	else
+	{
 		if (CheckHitKey(KEY_INPUT_G))
 		{
-			m_selectedPiace = BATU_G;
+			m_selectedPiece = BATU_G;
 		}
-		else if (CheckHitKey(KEY_INPUT_O))
+
+		if (CheckHitKey(KEY_INPUT_O))
 		{
-			m_selectedPiace = BATU_O;
+			m_selectedPiece = BATU_O;
 		}
 	}
-
-
-	// 入力処理
-	circlemove.Input();
-}
-
-bool GameScene::CanMove(int destX, int destY)
-{
-	// 盤面外なら移動できない
-	if (destX < 0 || destX >= 6 ||
-		destY < 0 || destY >= 6)
-	{
-		return false;
-	}
-
-	int dx = destX - m_selectedX;
-	int dy = destY - m_selectedY;
-
-	int piece = m_cell[m_selectedY][m_selectedX];
-
-
-	// =================================
-	// Gの駒（縦・横移動）
-	// =================================
-	if (piece == MARU_G || piece == BATU_G)
-	{
-		// 縦横以外には移動できない
-		if (dx != 0 && dy != 0)
-		{
-			return false;
-		}
-
-		// 同じ場所には移動できない
-		if (dx == 0 && dy == 0)
-		{
-			return false;
-		}
-
-
-		// 移動方向を決める
-		int stepX = 0;
-		int stepY = 0;
-
-		if (dx > 0)
-		{
-			stepX = 1;
-		}
-		else if (dx < 0)
-		{
-			stepX = -1;
-		}
-
-		if (dy > 0)
-		{
-			stepY = 1;
-		}
-		else if (dy < 0)
-		{
-			stepY = -1;
-		}
-
-
-		// 選択した駒の次のマスから調べる
-		int x = m_selectedX + stepX;
-		int y = m_selectedY + stepY;
-
-		while (x >= 0 && x < 6 &&
-			y >= 0 && y < 6)
-		{
-			// 駒を見つけた
-			if (m_cell[y][x] != NONE)
-			{
-				// 駒の1マス手前
-				int stopX = x - stepX;
-				int stopY = y - stepY;
-
-				// その場所なら移動OK
-				return destX == stopX && destY == stopY;
-			}
-
-			// クリックした場所まで来た
-			if (x == destX && y == destY)
-			{
-				return true;
-			}
-
-			x += stepX;
-			y += stepY;
-		}
-
-		return false;
-	}
-
-
-	// =================================
-	// Oの駒（斜め移動）
-	// =================================
-	if (piece == MARU_O || piece == BATU_O)
-	{
-		// 斜めになっているか確認
-		if (abs(dx) != abs(dy))
-		{
-			return false;
-		}
-
-		// 同じ場所には移動できない
-		if (dx == 0)
-		{
-			return false;
-		}
-
-		// 移動先に駒があれば移動できない
-		if (m_cell[destY][destX] != NONE)
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	return false;
 }
 
 void GameScene::Update()
 {
-	// 更新処理
-	circlemove.Update();	
-
-	// マウスの左クリックを取得
-	bool mouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
 	int mouseX;
 	int mouseY;
-	// マウスの座標を取得
+
 	GetMousePoint(&mouseX, &mouseY);
 
-	// 左クリック
-	// 左クリック
-	if (mouseLeft && !m_prevMouseLeft)
+	bool mouseLeft =
+		(GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+
+	// クリックした瞬間だけ処理
+	bool click =
+		mouseLeft && !m_prevMouseLeft;
+
+	//--------------------------------------------------
+	// クリックされていない
+	//--------------------------------------------------
+	if (click)
 	{
-		// 格子の中にいるか
+		// 170～830の範囲
 		if (mouseX >= 170 && mouseX < 830 &&
 			mouseY >= 170 && mouseY < 830)
 		{
-			// 何列目か
 			int cellX = (mouseX - 170) / LINE_WIDTH;
-
-			// 何行目か
 			int cellY = (mouseY - 170) / LINE_WIDTH;
 
-
-			// =================================
-			// 駒を選択していない場合
-			// =================================
+			//--------------------------------------------------
+			// 駒を移動中ではない
+			//--------------------------------------------------
 			if (!m_pieceMoving)
 			{
-				// -----------------------------
-				// 空いているなら新しく置く
-				// -----------------------------
-				if (m_cell[cellY][cellX] == NONE &&
-					((m_currentPlayer == PLAYER_MARU && m_maruCount < 5) ||
-						(m_currentPlayer == PLAYER_BATU && m_batuCount < 5)))
+				PieceType clickedPiece =
+					m_board.GetPiece(cellX, cellY);
+
+				//--------------------------------------------------
+				// 空いている → 駒を置く
+				//--------------------------------------------------
+				if (clickedPiece == NONE)
 				{
-					// 駒を置く
-					m_cell[cellY][cellX] = m_selectedPiace;
+					bool canPlace = false;
 
-
-					// 駒の数を増やす
 					if (m_currentPlayer == PLAYER_MARU)
 					{
-						m_maruCount++;
-					}
-					else
-					{
-						m_batuCount++;
-					}
-
-
-					// プレイヤー交代
-					if (m_currentPlayer == PLAYER_MARU)
-					{
-						m_currentPlayer = PLAYER_BATU;
-
-						if (m_selectedPiace == MARU_G)
+						if (m_maruCount < 7)
 						{
-							m_selectedPiace = BATU_G;
-						}
-						else if (m_selectedPiace == MARU_O)
-						{
-							m_selectedPiace = BATU_O;
+							canPlace = true;
 						}
 					}
 					else
 					{
-						m_currentPlayer = PLAYER_MARU;
-
-						if (m_selectedPiace == BATU_G)
+						if (m_batuCount < 7)
 						{
-							m_selectedPiace = MARU_G;
+							canPlace = true;
 						}
-						else if (m_selectedPiace == BATU_O)
+					}
+
+					if (canPlace)
+					{
+						if (m_board.PlacePiece(
+							cellX,
+							cellY,
+							m_selectedPiece))
 						{
-							m_selectedPiace = MARU_O;
+							if (m_currentPlayer == PLAYER_MARU)
+							{
+								m_maruCount++;
+								m_currentPlayer =
+									PLAYER_BATU;
+
+								// 次のプレイヤー用に×へ
+								if (m_selectedPiece == MARU_G)
+								{
+									m_selectedPiece = BATU_G;
+								}
+								else
+								{
+									m_selectedPiece = BATU_O;
+								}
+							}
+							else
+							{
+								m_batuCount++;
+								m_currentPlayer =
+									PLAYER_MARU;
+
+								// 次のプレイヤー用に○へ
+								if (m_selectedPiece == BATU_G)
+								{
+									m_selectedPiece = MARU_G;
+								}
+								else
+								{
+									m_selectedPiece = MARU_O;
+								}
+							}
 						}
 					}
 				}
 
-
-				// -----------------------------
-				// 駒があるなら選択する
-				// -----------------------------
-				else if (m_cell[cellY][cellX] != NONE)
+				//--------------------------------------------------
+				// 自分の駒をクリック → 移動開始
+				//--------------------------------------------------
+				else
 				{
-					// マルの駒
-					if (m_currentPlayer == PLAYER_MARU &&
-						(m_cell[cellY][cellX] == MARU_G ||
-							m_cell[cellY][cellX] == MARU_O))
+					bool isOwnPiece = false;
+
+					if (m_currentPlayer == PLAYER_MARU)
 					{
-						m_selectedX = cellX;
-						m_selectedY = cellY;
-						m_pieceMoving = true;
+						if (clickedPiece == MARU_G ||
+							clickedPiece == MARU_O)
+						{
+							isOwnPiece = true;
+						}
+					}
+					else
+					{
+						if (clickedPiece == BATU_G ||
+							clickedPiece == BATU_O)
+						{
+							isOwnPiece = true;
+						}
 					}
 
-					// バツの駒
-					else if (m_currentPlayer == PLAYER_BATU &&
-						(m_cell[cellY][cellX] == BATU_G ||
-							m_cell[cellY][cellX] == BATU_O))
+					if (isOwnPiece)
 					{
 						m_selectedX = cellX;
 						m_selectedY = cellY;
+
 						m_pieceMoving = true;
 					}
 				}
 			}
 
-
-			// =================================
-			// 駒を選択中の場合
-			// =================================
+			//--------------------------------------------------
+			// 駒を移動中
+			//--------------------------------------------------
 			else
 			{
-				// 移動先が空いているか
-				if (CanMove(cellX,cellY))
+				int resultX;
+				int resultY;
+
+				if (m_board.GetMovePosition(
+					m_selectedX,
+					m_selectedY,
+					cellX,
+					cellY,
+					resultX,
+					resultY,
+					m_circleMove))
 				{
-					// 駒を移動
-					m_cell[cellY][cellX] =
-						m_cell[m_selectedY][m_selectedX];
-
-					// 元の場所を空にする
-					m_cell[m_selectedY][m_selectedX] = NONE;
-
-
-					// 選択解除
-					m_selectedX = -1;
-					m_selectedY = -1;
-					m_pieceMoving = false;
-
-
-					// プレイヤー交代
-					if (m_currentPlayer == PLAYER_MARU)
+					if (m_board.MovePiece(
+						m_selectedX,
+						m_selectedY,
+						resultX,
+						resultY))
 					{
-						m_currentPlayer = PLAYER_BATU;
+						m_selectedX = -1;
+						m_selectedY = -1;
 
-						if (m_selectedPiace == MARU_G)
-						{
-							m_selectedPiace = BATU_G;
-						}
-						else if (m_selectedPiace == MARU_O)
-						{
-							m_selectedPiace = BATU_O;
-						}
-					}
-					else
-					{
-						m_currentPlayer = PLAYER_MARU;
+						m_pieceMoving = false;
 
-						if (m_selectedPiace == BATU_G)
+						// ターン変更
+						if (m_currentPlayer == PLAYER_MARU)
 						{
-							m_selectedPiace = MARU_G;
+							m_currentPlayer =
+								PLAYER_BATU;
+
+							m_selectedPiece = BATU_G;
 						}
-						else if (m_selectedPiace == BATU_O)
+						else
 						{
-							m_selectedPiace = MARU_O;
+							m_currentPlayer =
+								PLAYER_MARU;
+
+							m_selectedPiece = MARU_G;
 						}
 					}
 				}
 			}
 		}
 	}
-
 
 	m_prevMouseLeft = mouseLeft;
 }
 
-
-
 void GameScene::Draw()
 {
-	// 描画処理
-	circlemove.Draw();
+	//--------------------------------------------------
+	// 6×6の盤面を描画
+	//--------------------------------------------------
 
-	//　格子状の線を描画する
 	for (int i = 0; i < LINE_NUM; i++)
 	{
-		//　線の色を取得
-		int r = m_lineColor.r;
-		int g = m_lineColor.g;
-		int b = m_lineColor.b;
+		int lineColor = m_lineColor;
 
-		// 4つ目を赤にする
-		if (i == 3) {
-			r = 255; g = 0; b = 0;
+		// 真ん中の線だけ赤色
+		if (i == 3)
+		{
+			lineColor = GetColor(255, 0, 0);
 		}
 
 		// 横線
-		DrawLine(m_linePosition[i].x1, m_linePosition[i].y1 + i * LINE_WIDTH ,m_linePosition[i].x2, m_linePosition[i].y2 + i * LINE_WIDTH, GetColor(r, g, b));
+		DrawLine(
+			170,
+			170 + i * LINE_WIDTH,
+			830,
+			170 + i * LINE_WIDTH,
+			lineColor,
+			3);
 
 		// 縦線
-		DrawLine(m_linePosition2[i].x1 + i * LINE_WIDTH, m_linePosition2[i].y1, m_linePosition2[i].x2 + i * LINE_WIDTH, m_linePosition2[i].y2, GetColor(r, g, b));
+		DrawLine(
+			170 + i * LINE_WIDTH,
+			170,
+			170 + i * LINE_WIDTH,
+			830,
+			lineColor,
+			3);
 	}
 
-	for (int y = 0; y < 6; y++)
-	{
-		for (int x = 0; x < 6; x++)
-		{
-			//　駒の描画位置を計算
-				int drawX = 175 + x * LINE_WIDTH;
-				int drawY = 175 + y * LINE_WIDTH;
+	//--------------------------------------------------
+	// 駒を描画
+	//--------------------------------------------------
 
-				//　駒の種類に応じて描画する
-				if (m_cell[y][x] == MARU_G) {
-					circlemove.DrawMaruG(drawX, drawY);
-				}
-				else if (m_cell[y][x] == MARU_O) {
-					circlemove.DrawMaruO(drawX, drawY);
-				}
-				else if (m_cell[y][x] == BATU_G) {
-					circlemove.DrawBatuG(drawX, drawY);
-				}
-				else if (m_cell[y][x] == BATU_O) {
-					circlemove.DrawBatuO(drawX, drawY);
-				}
-				
-			
+	for (int y = 0; y < BOARD_SIZE; y++)
+	{
+		for (int x = 0; x < BOARD_SIZE; x++)
+		{
+			PieceType piece =
+				m_board.GetPiece(x, y);
+
+			if (piece != NONE)
+			{
+				int drawX =
+					120 + x * LINE_WIDTH + LINE_WIDTH/ 2;
+
+				int drawY =
+					120 + y * LINE_WIDTH + LINE_WIDTH / 2;
+
+				m_circleMove.DrawPiece(
+					piece,
+					drawX,
+					drawY);
+			}
 		}
 	}
-
-
 }
 
 void GameScene::Sound_play()
 {
-	// 音声再生処理
 }

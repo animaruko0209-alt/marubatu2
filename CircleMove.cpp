@@ -1,26 +1,6 @@
 #include "CircleMove.h"
 
 
-bool CircleMove::CanMoveCross(int dx, int dy)
-{
-		if (dx != 0 && dy != 0)
-		{
-			return false;
-		}
-		return true;
-
-}
-
-bool CircleMove::CanMoveDiagonal(int dx, int dy) {
-	// o_circle ¨ Î‚ß
-	if (dx == 0 || dy == 0)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 
 void CircleMove::Init()
 {
@@ -28,6 +8,66 @@ void CircleMove::Init()
     g_circle.image = LoadGraph("g_maru.png");
 	o_batu.image = LoadGraph("o_batu.png");
 	g_batu.image = LoadGraph("g_batu.png");
+}
+
+bool CircleMove::CanMove(PieceType piece, int dx, int dy)
+{
+	// ›G / ~G
+	// c‚Ü‚½‚Í‰¡‚ÉˆÚ“®
+	if (piece == MARU_G || piece == BATU_G)
+	{
+		// ‰¡ˆÚ“®
+		if (dx != 0 && dy == 0)
+		{
+			return true;
+		}
+
+		// cˆÚ“®
+		if (dx == 0 && dy != 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	// ›O / ~O
+	// Î‚ß‚ÉˆÚ“®
+	if (piece == MARU_O || piece == BATU_O)
+	{
+		if (dx != 0 && dy != 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
+}
+
+void CircleMove::DrawPiece(PieceType piece, int x, int y)
+{
+	switch (piece)
+	{
+	case MARU_G:
+		// ›G‚Ì•`‰æ
+		DrawGraph(x, y, g_circle.image, true);
+		break;
+
+	case MARU_O:
+		// ›O‚Ì•`‰æ
+		DrawGraph(x, y, o_circle.image, true);
+		break;
+
+	case BATU_G:
+		DrawGraph(x, y, g_batu.image, true);
+		break;
+
+	case BATU_O:
+		DrawGraph(x, y, o_batu.image, true);
+		break;
+	}
 }
 
 void CircleMove::Input()
@@ -46,25 +86,6 @@ void CircleMove::Draw()
 
 }
 
-void CircleMove::DrawMaruG(int x, int y)
-{
-	DrawGraph(x, y, g_circle.image, true);
-}
-
-void CircleMove::DrawMaruO(int x, int y)
-{
-	DrawGraph(x, y, o_circle.image, true);
-}
-
-void CircleMove::DrawBatuG(int x, int y)
-{
-	DrawGraph(x, y, g_batu.image, true);
-}
-
-void CircleMove::DrawBatuO(int x, int y)
-{
-	DrawGraph(x, y, o_batu.image, true);
-}
 
 void CircleMove::Sound_play()
 {
