@@ -36,6 +36,10 @@ private:
 
 	bool m_pieceMoving;
 
+	bool CheckWin(Player player);
+	bool m_gameEnd;
+	Player m_winner;
+
 public:
 
 	void Init() override;
