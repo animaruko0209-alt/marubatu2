@@ -40,6 +40,9 @@ private:
 	bool m_gameEnd;
 	Player m_winner;
 
+	//‚Ü‚é‚Æ‚Î‚Â‚ÌF‚ğ¦‚·
+	int m_pieceColor[2];
+
 public:
 
 	void Init() override;

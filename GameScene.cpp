@@ -37,6 +37,10 @@ void GameScene::Init()
 
 
 	m_ui.Init();
+
+	//表示カラーは黒
+	m_pieceColor[0] = GetColor(0, 0, 0);
+	m_pieceColor[1] = GetColor(0, 0, 0);
 }
 
 void GameScene::Input()
@@ -543,6 +547,33 @@ void GameScene::Draw()
 
 	}
 
+	//選択した種類の表示
+	if (m_selectedPiece == MARU_G)
+	{
+		m_pieceColor[0] = GetColor(50, 200, 70);
+	}
+	else if (m_selectedPiece == MARU_O)
+	{
+		m_pieceColor[0] = GetColor(250, 120, 30);
+	}
+	else
+	{
+		m_pieceColor[0] = GetColor(0, 0, 0);
+	}
+	if (m_selectedPiece == BATU_G)
+	{
+		m_pieceColor[1] = GetColor(50, 200, 70);
+	}
+	else if (m_selectedPiece == BATU_O)
+	{
+		m_pieceColor[1] = GetColor(250, 120, 30);
+	}
+	else
+	{
+		m_pieceColor[1] = GetColor(0, 0, 0);
+	}
+	DrawFillBox(100, 400, 150, 450, m_pieceColor[0]);
+	DrawFillBox(1050, 400, 1100, 450, m_pieceColor[1]);
 }
 
 void GameScene::Sound_play()
