@@ -133,9 +133,10 @@
     <ClCompile Include="CircleMove.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneBase.h" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,8 +146,9 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="Result.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="GameUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

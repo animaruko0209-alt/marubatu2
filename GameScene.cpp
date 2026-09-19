@@ -37,24 +37,24 @@ void GameScene::Input()
 	// G / O‚Ì‘I‘ð
 	if (m_currentPlayer == PLAYER_MARU)
 	{
-		if (CheckHitKey(KEY_INPUT_G))
+		if (CheckHitKey(KEY_INPUT_UP))
 		{
 			m_selectedPiece = MARU_G;
 		}
 
-		if (CheckHitKey(KEY_INPUT_O))
+		if (CheckHitKey(KEY_INPUT_DOWN))
 		{
 			m_selectedPiece = MARU_O;
 		}
 	}
 	else
 	{
-		if (CheckHitKey(KEY_INPUT_G))
+		if (CheckHitKey(KEY_INPUT_UP))
 		{
 			m_selectedPiece = BATU_G;
 		}
 
-		if (CheckHitKey(KEY_INPUT_O))
+		if (CheckHitKey(KEY_INPUT_DOWN))
 		{
 			m_selectedPiece = BATU_O;
 		}
