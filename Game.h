@@ -1,5 +1,6 @@
 #pragma once
 #include "GameScene.h"
+#include "SceneBase.h"
 #include <memory>
 #include"Dxlib.h"
 
@@ -12,8 +13,8 @@ class Game
 
 	//std::shared_ptr<SceneBase> current_scene_ptr = nullptr;
 
-	GameScene* current_scene_ptr = nullptr;
-
+	//GameScene* current_scene_ptr = nullptr;
+	SceneBase* current_scene_ptr = nullptr;
 public:
 
 	Game() {}

@@ -3,7 +3,8 @@
 class SceneBase {
 protected:
 
-	int next_scene = -1;   // -1 = シーンはまだ続く
+	int next_scene = -1;  // -1 = シーンはまだ続く
+
 
 public:
 
@@ -32,6 +33,6 @@ public:
 	/// </summary>
 	virtual void Sound_play() = 0;
 
-	//int GetNextScene() const { return next_scene; }
+	int GetNextScene() const { return next_scene; }
 };
 

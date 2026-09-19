@@ -2,122 +2,55 @@
 #include"Game.h"
 #include"SceneBase.h"
 #include "CircleMove.h"
+#include "Title.h"
+#include"GameScene.h"
 #include <memory>
 #include <ctime>
 
 /// <summary>
 /// ゲームループ
 /// </summary>
-
 void Game::Game_loop()
 {
-
-	current_scene_ptr = new GameScene();
-	current_scene_ptr->Init();
-	scene_no = 0;
-
-	
-	switch (this->scene_no) {
-
-	case 0:
-		// オープニング
-
-
-		break;
-
-	case 1:
-		// テストシーン
-
-		break;
-
-	case 2:
-		// エンディング
-
-		break;
-	case 3:
-
-		break;
-	}
-	//SceneBase* curret_scene_ptr = new SceneTest();
-
-
-	while (ProcessMessage() == 0)
-	{
-
-		// リフレッシュレートを設定するための処理
-
-		clock_t check_fps = clock() + CLOCKS_PER_SEC / 60;
-
-		// マウスカーソル表示設定
-
-		SetMouseDispFlag(TRUE);
-
-		// 画面上の描画を初期化（画面を消去）
-
-		ClearDrawScreen();
-
-
-
-		// =======================================
-		//  入力処理
-		// =======================================
-
-		current_scene_ptr->Input();
-		// =======================================
-		//  更新処理
-		// =======================================
-		current_scene_ptr->Update();
-
-
-	//	int next = current_scene_ptr->GetNextScene();
-		//if (next != -1)
-		//{
-		//	// shared_ptr に置き換えたので delete は不要
-		//	scene_no = next;
-
-		//	InitGraph();
-
-		//	switch (scene_no)
-		//	{
-		//	case 0:
-
-		//		break;
-		//	case 1:
-
-		//		break;
-		//	case 2:
-
-		//		break;
-		//	case 3:
-
-		//		break;
-		//	}
-
-
-		//	continue;  // ← 新しいシーンのループを最初から実行
-		//}
-
-		// =======================================
-		//  描画処理
-		// =======================================
-
-		current_scene_ptr->Draw();
-
-		// =======================================
-		//  音声再生処理
-		// =======================================
-
-		current_scene_ptr->Sound_play();
-
-		// リフレッシュレートが一定になるまで待つ処理
-
-		while (clock() < check_fps) {}
-
-		// 裏画面の描画を表に反映
-
-		ScreenFlip();
-
-	}
-
+    // 最初にタイトル画面を作る
+    current_scene_ptr = new SceneOp(this);
+    current_scene_ptr->Init();
+    scene_no = 0;
+    while (ProcessMessage() == 0)
+    {
+        // 入力
+        current_scene_ptr->Input();
+        // 更新
+        current_scene_ptr->Update();
+        // シーン変更
+        int next = current_scene_ptr->GetNextScene();
+        if (next != -1)
+        {
+            delete current_scene_ptr;
+            current_scene_ptr = nullptr;
+            scene_no = next;
+            switch (scene_no)
+            {
+            case 0:
+                current_scene_ptr = new SceneOp(this);
+                break;
+            case 1:
+                current_scene_ptr = new GameScene();
+                break;
+            }
+            if (current_scene_ptr != nullptr)
+            {
+                current_scene_ptr->Init();
+            }
+        }
+        // 描画
+        ClearDrawScreen();
+        if (current_scene_ptr != nullptr)
+        {
+            current_scene_ptr->Draw();
+        }
+        ScreenFlip();
+    }
+    delete current_scene_ptr;
+    current_scene_ptr = nullptr;
 }
-
