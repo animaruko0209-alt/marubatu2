@@ -31,6 +31,11 @@ void GameScene::Init()
 	// 移動中か
 	m_pieceMoving = false;
 
+	// 勝利状態
+	m_gameEnd = false;
+	m_winner = PLAYER_MARU;
+
+
 	m_ui.Init();
 }
 
@@ -64,9 +69,156 @@ void GameScene::Input()
 
 	m_ui.Input();
 }
+bool GameScene::CheckWin(Player player)
+{
+	// 4つの3×3エリアを調べる
+	for (int areaY = 0; areaY < 6; areaY += 3)
+	{
+		for (int areaX = 0; areaX < 6; areaX += 3)
+		{
+			// 横3つ
+			for (int y = 0; y < 3; y++)
+			{
+				bool win = true;
+
+				for (int x = 0; x < 3; x++)
+				{
+					PieceType piece =
+						m_board.GetPiece(areaX + x, areaY + y);
+
+					if (player == PLAYER_MARU)
+					{
+						if (piece != MARU_G &&
+							piece != MARU_O)
+						{
+							win = false;
+						}
+					}
+					else
+					{
+						if (piece != BATU_G &&
+							piece != BATU_O)
+						{
+							win = false;
+						}
+					}
+				}
+
+				if (win)
+				{
+					return true;
+				}
+			}
+
+			// 縦3つ
+			for (int x = 0; x < 3; x++)
+			{
+				bool win = true;
+
+				for (int y = 0; y < 3; y++)
+				{
+					PieceType piece =
+						m_board.GetPiece(areaX + x, areaY + y);
+
+					if (player == PLAYER_MARU)
+					{
+						if (piece != MARU_G &&
+							piece != MARU_O)
+						{
+							win = false;
+						}
+					}
+					else
+					{
+						if (piece != BATU_G &&
+							piece != BATU_O)
+						{
+							win = false;
+						}
+					}
+				}
+
+				if (win)
+				{
+					return true;
+				}
+			}
+
+			// 左上 → 右下
+			bool win = true;
+
+			for (int i = 0; i < 3; i++)
+			{
+				PieceType piece =
+					m_board.GetPiece(areaX + i, areaY + i);
+
+				if (player == PLAYER_MARU)
+				{
+					if (piece != MARU_G &&
+						piece != MARU_O)
+					{
+						win = false;
+					}
+				}
+				else
+				{
+					if (piece != BATU_G &&
+						piece != BATU_O)
+					{
+						win = false;
+					}
+				}
+			}
+
+			if (win)
+			{
+				return true;
+			}
+
+			// 右上 → 左下
+			win = true;
+
+			for (int i = 0; i < 3; i++)
+			{
+				PieceType piece =
+					m_board.GetPiece(areaX + (2 - i), areaY + i);
+
+				if (player == PLAYER_MARU)
+				{
+					if (piece != MARU_G &&
+						piece != MARU_O)
+					{
+						win = false;
+					}
+				}
+				else
+				{
+					if (piece != BATU_G &&
+						piece != BATU_O)
+					{
+						win = false;
+					}
+				}
+			}
+
+			if (win)
+			{
+				return true;
+			}
+
+		}
+	}
+
+	return false;
+}
 
 void GameScene::Update()
 {
+	if (m_gameEnd)
+	{
+		return;
+	}
+
 
 	m_ui.Update();
 
@@ -131,6 +283,14 @@ void GameScene::Update()
 							cellY,
 							m_selectedPiece))
 						{
+							// 駒を置いたので勝利判定
+							if (CheckWin(m_currentPlayer))
+							{
+								m_gameEnd = true;
+								m_winner = m_currentPlayer;
+								return;
+							}
+
 							if (m_currentPlayer == PLAYER_MARU)
 							{
 								m_maruCount++;
@@ -269,6 +429,16 @@ void GameScene::Update()
 
 							m_pieceMoving = false;
 
+							// 移動した後に勝利判定
+							if (CheckWin(m_currentPlayer))
+							{
+								m_gameEnd = true;
+								m_winner = m_currentPlayer;
+								return;
+							}
+
+
+
 							// ターン変更
 							if (m_currentPlayer == PLAYER_MARU)
 							{
@@ -354,6 +524,25 @@ void GameScene::Draw()
 			}
 		}
 	}
+
+	if (m_gameEnd) {
+		if (m_winner == PLAYER_MARU) {
+			DrawString(
+				500,
+				50,
+				"〇勝ち",
+				GetColor(255, 255, 255));
+		}
+		else {
+			DrawString(
+				500,
+				50,
+				"×勝ち",
+				GetColor(255, 255, 255));
+		}
+
+	}
+
 }
 
 void GameScene::Sound_play()
