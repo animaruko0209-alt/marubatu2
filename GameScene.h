@@ -3,6 +3,7 @@
 #include "SceneBase.h"
 #include "Board.h"
 #include "CircleMove.h"
+#include"GameUI.h"
 
 #define LINE_NUM 7
 #define LINE_WIDTH 110
@@ -21,10 +22,9 @@ private:
 
 	Board m_board;
 	CircleMove m_circleMove;
-
 	Player m_currentPlayer;
-
 	PieceType m_selectedPiece;
+	GameUI m_ui;
 
 	bool m_prevMouseLeft;
 

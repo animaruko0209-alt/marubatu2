@@ -10,7 +10,7 @@
 
 //	定数の宣言
 
-#define WINDOW_W 1000	// 画面サイズ　横
+#define WINDOW_W 1200	// 画面サイズ　横
 
 #define WINDOW_H 1000	// 画面サイズ　縦
 

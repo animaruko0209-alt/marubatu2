@@ -30,6 +30,8 @@ void GameScene::Init()
 
 	// 移動中か
 	m_pieceMoving = false;
+
+	m_ui.Init();
 }
 
 void GameScene::Input()
@@ -59,10 +61,15 @@ void GameScene::Input()
 			m_selectedPiece = BATU_O;
 		}
 	}
+
+	m_ui.Input();
 }
 
 void GameScene::Update()
 {
+
+	m_ui.Update();
+
 	int mouseX;
 	int mouseY;
 
@@ -81,10 +88,10 @@ void GameScene::Update()
 	if (click)
 	{
 		// 170～830の範囲
-		if (mouseX >= 170 && mouseX < 830 &&
+		if (mouseX >= 270 && mouseX < 930 &&
 			mouseY >= 170 && mouseY < 830)
 		{
-			int cellX = (mouseX - 170) / LINE_WIDTH;
+			int cellX = (mouseX - 270) / LINE_WIDTH;
 			int cellY = (mouseY - 170) / LINE_WIDTH;
 
 			//--------------------------------------------------
@@ -127,8 +134,7 @@ void GameScene::Update()
 							if (m_currentPlayer == PLAYER_MARU)
 							{
 								m_maruCount++;
-								m_currentPlayer =
-									PLAYER_BATU;
+								m_currentPlayer =PLAYER_BATU;
 
 								// 次のプレイヤー用に×へ
 								if (m_selectedPiece == MARU_G)
@@ -143,8 +149,7 @@ void GameScene::Update()
 							else
 							{
 								m_batuCount++;
-								m_currentPlayer =
-									PLAYER_MARU;
+								m_currentPlayer =PLAYER_MARU;
 
 								// 次のプレイヤー用に○へ
 								if (m_selectedPiece == BATU_G)
@@ -225,15 +230,13 @@ void GameScene::Update()
 						// ターン変更
 						if (m_currentPlayer == PLAYER_MARU)
 						{
-							m_currentPlayer =
-								PLAYER_BATU;
+							m_currentPlayer =PLAYER_BATU;
 
 							m_selectedPiece = BATU_G;
 						}
 						else
 						{
-							m_currentPlayer =
-								PLAYER_MARU;
+							m_currentPlayer =PLAYER_MARU;
 
 							m_selectedPiece = MARU_G;
 						}
@@ -248,6 +251,9 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+
+	m_ui.Draw();
+
 	//--------------------------------------------------
 	// 6×6の盤面を描画
 	//--------------------------------------------------
@@ -264,18 +270,18 @@ void GameScene::Draw()
 
 		// 横線
 		DrawLine(
-			170,
+			270,
 			170 + i * LINE_WIDTH,
-			830,
+			930,
 			170 + i * LINE_WIDTH,
 			lineColor,
 			3);
 
 		// 縦線
 		DrawLine(
-			170 + i * LINE_WIDTH,
+			270 + i * LINE_WIDTH,
 			170,
-			170 + i * LINE_WIDTH,
+			270 + i * LINE_WIDTH,
 			830,
 			lineColor,
 			3);
@@ -295,7 +301,7 @@ void GameScene::Draw()
 			if (piece != NONE)
 			{
 				int drawX =
-					120 + x * LINE_WIDTH + LINE_WIDTH/ 2;
+					220 + x * LINE_WIDTH + LINE_WIDTH/ 2;
 
 				int drawY =
 					120 + y * LINE_WIDTH + LINE_WIDTH / 2;
