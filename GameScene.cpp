@@ -204,41 +204,82 @@ void GameScene::Update()
 			//--------------------------------------------------
 			else
 			{
-				int resultX;
-				int resultY;
+				PieceType clickedPiece =
+				m_board.GetPiece(cellX, cellY);
 
-				if (m_board.GetMovePosition(
-					m_selectedX,
-					m_selectedY,
-					cellX,
-					cellY,
-					resultX,
-					resultY,
-					m_circleMove))
+				bool isOwnPiece = false;
+
+				// クリックしたのが自分の駒か確認
+				if (m_currentPlayer == PLAYER_MARU)
 				{
-					if (m_board.MovePiece(
+					if (clickedPiece == MARU_G ||
+						clickedPiece == MARU_O)
+					{
+						isOwnPiece = true;
+					}
+				}
+				else
+				{
+					if (clickedPiece == BATU_G ||
+						clickedPiece == BATU_O)
+					{
+						isOwnPiece = true;
+					}
+				}
+
+				//--------------------------------------------------
+				// 自分の別の駒をクリック
+				// → 選択する駒を変更
+				//--------------------------------------------------
+				if (isOwnPiece)
+				{
+					m_selectedX = cellX;
+					m_selectedY = cellY;
+
+					// 移動中のまま
+					m_pieceMoving = true;
+				}
+
+				//--------------------------------------------------
+				// 自分の駒ではない
+				// → 移動先として処理
+				//--------------------------------------------------
+				else
+				{
+					int resultX;
+					int resultY;
+
+					if (m_board.GetMovePosition(
 						m_selectedX,
 						m_selectedY,
+						cellX,
+						cellY,
 						resultX,
-						resultY))
+						resultY,
+						m_circleMove))
 					{
-						m_selectedX = -1;
-						m_selectedY = -1;
-
-						m_pieceMoving = false;
-
-						// ターン変更
-						if (m_currentPlayer == PLAYER_MARU)
+						if (m_board.MovePiece(
+							m_selectedX,
+							m_selectedY,
+							resultX,
+							resultY))
 						{
-							m_currentPlayer =PLAYER_BATU;
+							m_selectedX = -1;
+							m_selectedY = -1;
 
-							m_selectedPiece = BATU_G;
-						}
-						else
-						{
-							m_currentPlayer =PLAYER_MARU;
+							m_pieceMoving = false;
 
-							m_selectedPiece = MARU_G;
+							// ターン変更
+							if (m_currentPlayer == PLAYER_MARU)
+							{
+								m_currentPlayer = PLAYER_BATU;
+								m_selectedPiece = BATU_G;
+							}
+							else
+							{
+								m_currentPlayer = PLAYER_MARU;
+								m_selectedPiece = MARU_G;
+							}
 						}
 					}
 				}
