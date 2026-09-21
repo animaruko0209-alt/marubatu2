@@ -4,20 +4,29 @@
 #include "Board.h"
 #include "CircleMove.h"
 #include"GameUI.h"
+#include"Player.h"
 
 #define LINE_NUM 7
 #define LINE_WIDTH 110
 
-enum Player
-{
-	PLAYER_MARU,
-	PLAYER_BATU
-};
+class Game;
 
 class GameScene : public SceneBase
 {
+
+public:
+
+	GameScene(Game* game);
+
+	void Init() override;
+	void Input() override;
+	void Update() override;
+	void Draw() override;
+	void Sound_play() override;
+
 private:
 
+	Game* game_ptr;
 	int m_lineColor;
 
 	Board m_board;
@@ -43,11 +52,6 @@ private:
 	//Ç‹ÇÈÇ∆ÇŒÇ¬ÇÃêFÇé¶Ç∑
 	int m_pieceColor[2];
 
-public:
 
-	void Init() override;
-	void Input() override;
-	void Update() override;
-	void Draw() override;
-	void Sound_play() override;
+
 };

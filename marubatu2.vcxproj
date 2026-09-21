@@ -146,6 +146,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="GameUI.h" />

@@ -1,5 +1,11 @@
 #include "GameScene.h"
+#include"Game.h"
 #include "DxLib.h"
+
+GameScene::GameScene(Game* game)
+{
+	game_ptr = game;
+}
 
 void GameScene::Init()
 {
@@ -35,6 +41,7 @@ void GameScene::Init()
 	m_gameEnd = false;
 	m_winner = PLAYER_MARU;
 
+	next_scene = -1;
 
 	m_ui.Init();
 
@@ -218,12 +225,12 @@ bool GameScene::CheckWin(Player player)
 
 void GameScene::Update()
 {
-	if (m_gameEnd)
-	{
+
+
+	if (m_gameEnd) {	
+		next_scene = 2;
 		return;
 	}
-
-
 	m_ui.Update();
 
 	int mouseX;
@@ -292,6 +299,8 @@ void GameScene::Update()
 							{
 								m_gameEnd = true;
 								m_winner = m_currentPlayer;
+
+								game_ptr->SetWinner(m_winner);
 								return;
 							}
 
@@ -438,6 +447,9 @@ void GameScene::Update()
 							{
 								m_gameEnd = true;
 								m_winner = m_currentPlayer;
+
+								game_ptr->SetWinner(m_winner);
+
 								return;
 							}
 
@@ -460,6 +472,8 @@ void GameScene::Update()
 			}
 		}
 	}
+
+	
 
 	m_prevMouseLeft = mouseLeft;
 }
@@ -529,23 +543,23 @@ void GameScene::Draw()
 		}
 	}
 
-	if (m_gameEnd) {
-		if (m_winner == PLAYER_MARU) {
-			DrawString(
-				500,
-				50,
-				"ÅZèüÇø",
-				GetColor(255, 255, 255));
-		}
-		else {
-			DrawString(
-				500,
-				50,
-				"Å~èüÇø",
-				GetColor(255, 255, 255));
-		}
+	//if (m_gameEnd) {
+	//	if (m_winner == PLAYER_MARU) {
+	//		DrawString(
+	//			500,
+	//			50,
+	//			"ÅZèüÇø",
+	//			GetColor(255, 255, 255));
+	//	}
+	//	else {
+	//		DrawString(
+	//			500,
+	//			50,
+	//			"Å~èüÇø",
+	//			GetColor(255, 255, 255));
+	//	}
 
-	}
+	//}
 
 	//ëIëÇµÇΩéÌóﬁÇÃï\é¶
 	if (m_selectedPiece == MARU_G)

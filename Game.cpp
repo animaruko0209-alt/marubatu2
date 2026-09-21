@@ -4,6 +4,7 @@
 #include "CircleMove.h"
 #include "Title.h"
 #include"GameScene.h"
+#include"Result.h"
 #include <memory>
 #include <ctime>
 
@@ -35,7 +36,10 @@ void Game::Game_loop()
                 current_scene_ptr = new SceneOp(this);
                 break;
             case 1:
-                current_scene_ptr = new GameScene();
+                current_scene_ptr = new GameScene(this);
+                break;
+            case 2:
+                current_scene_ptr = new Result(this);
                 break;
             }
             if (current_scene_ptr != nullptr)
