@@ -26,6 +26,8 @@ void GameScene::Init()
 	// マウス
 	m_prevMouseLeft = false;
 
+	m_turnStartTime = GetNowCount();
+
 	// 駒数
 	m_maruCount = 0;
 	m_batuCount = 0;
@@ -48,6 +50,13 @@ void GameScene::Init()
 	//表示カラーは黒
 	m_pieceColor[0] = GetColor(0, 0, 0);
 	m_pieceColor[1] = GetColor(0, 0, 0);
+
+	m_lastPlaceArea = -1;
+	m_maruLastPlaceArea = -1;
+	m_batuLastPlaceArea = -1;
+
+	
+
 }
 
 void GameScene::Input()
@@ -226,12 +235,40 @@ bool GameScene::CheckWin(Player player)
 void GameScene::Update()
 {
 
-
 	if (m_gameEnd) {	
 		next_scene = 2;
 		return;
 	}
 	m_ui.Update();
+
+	if (GetNowCount() - m_turnStartTime >= 30000)
+	{
+		if (m_currentPlayer == PLAYER_MARU)
+		{
+			m_currentPlayer = PLAYER_BATU;
+			m_selectedPiece = BATU_G;
+		}
+		else
+		{
+			m_currentPlayer = PLAYER_MARU;
+			m_selectedPiece = MARU_G;
+		}
+
+		// 移動中だった場合は解除
+		m_selectedX = -1;
+		m_selectedY = -1;
+		m_pieceMoving = false;
+
+		// ターン開始時間をリセット
+		m_turnStartTime = GetNowCount();
+
+		// 前の配置制限を解除
+		if (m_currentPlayer == PLAYER_MARU)
+			m_maruLastPlaceArea = -1;
+		else
+			m_batuLastPlaceArea = -1;
+	}
+
 
 	int mouseX;
 	int mouseY;
@@ -287,6 +324,28 @@ void GameScene::Update()
 						}
 					}
 
+					// 3×3エリアの制限
+					int areaX = cellX / 3;
+					int areaY = cellY / 3;
+
+					int area = areaY * 2 + areaX;
+
+					// プレイヤーごとの配置制限
+					if (m_currentPlayer == PLAYER_MARU)
+					{
+						if (area == m_maruLastPlaceArea)
+						{
+							canPlace = false;
+						}
+					}
+					else
+					{
+						if (area == m_batuLastPlaceArea)
+						{
+							canPlace = false;
+						}
+					}
+
 					if (canPlace)
 					{
 						if (m_board.PlacePiece(
@@ -294,6 +353,7 @@ void GameScene::Update()
 							cellY,
 							m_selectedPiece))
 						{
+
 							// 駒を置いたので勝利判定
 							if (CheckWin(m_currentPlayer))
 							{
@@ -307,7 +367,10 @@ void GameScene::Update()
 							if (m_currentPlayer == PLAYER_MARU)
 							{
 								m_maruCount++;
+								m_maruLastPlaceArea = area;
 								m_currentPlayer =PLAYER_BATU;
+
+								m_turnStartTime = GetNowCount();
 
 								// 次のプレイヤー用に×へ
 								if (m_selectedPiece == MARU_G)
@@ -322,7 +385,10 @@ void GameScene::Update()
 							else
 							{
 								m_batuCount++;
+								m_batuLastPlaceArea = area;
 								m_currentPlayer =PLAYER_MARU;
+
+								m_turnStartTime = GetNowCount();
 
 								// 次のプレイヤー用に○へ
 								if (m_selectedPiece == BATU_G)
@@ -406,11 +472,24 @@ void GameScene::Update()
 				//--------------------------------------------------
 				if (isOwnPiece)
 				{
-					m_selectedX = cellX;
-					m_selectedY = cellY;
+					// 今選択している駒をもう一度クリック
+					if (cellX == m_selectedX &&
+						cellY == m_selectedY)
+					{
+						// 移動をキャンセル
+						m_selectedX = -1;
+						m_selectedY = -1;
+						m_pieceMoving = false;
+					}
+					else
+					{
+						// 別の自分の駒をクリック
+						// → 選択する駒を変更
+						m_selectedX = cellX;
+						m_selectedY = cellY;
 
-					// 移動中のまま
-					m_pieceMoving = true;
+						m_pieceMoving = true;
+					}
 				}
 
 				//--------------------------------------------------
@@ -442,6 +521,7 @@ void GameScene::Update()
 
 							m_pieceMoving = false;
 
+
 							// 移動した後に勝利判定
 							if (CheckWin(m_currentPlayer))
 							{
@@ -459,12 +539,16 @@ void GameScene::Update()
 							if (m_currentPlayer == PLAYER_MARU)
 							{
 								m_currentPlayer = PLAYER_BATU;
+								m_maruLastPlaceArea = -1;
 								m_selectedPiece = BATU_G;
+								m_turnStartTime = GetNowCount();
 							}
 							else
 							{
 								m_currentPlayer = PLAYER_MARU;
+								m_batuLastPlaceArea = -1;
 								m_selectedPiece = MARU_G;
+								m_turnStartTime = GetNowCount();
 							}
 						}
 					}
@@ -482,6 +566,44 @@ void GameScene::Draw()
 {
 
 	m_ui.Draw();
+
+	//========================================
+   // 新しく駒を置けない3×3エリアを薄灰色にする
+   //========================================
+
+	int blockedArea = -1;
+
+	if (m_currentPlayer == PLAYER_MARU)
+	{
+		blockedArea = m_maruLastPlaceArea;
+	}
+	else
+	{
+		blockedArea = m_batuLastPlaceArea;
+	}
+
+	if (blockedArea != -1)
+	{
+		int areaX = blockedArea % 2;
+		int areaY = blockedArea / 2;
+
+		int x = 270 + areaX * LINE_WIDTH * 3;
+		int y = 170 + areaY * LINE_WIDTH * 3;
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+
+		DrawBox(
+			x,
+			y,
+			x + LINE_WIDTH * 3,
+			y + LINE_WIDTH * 3,
+			GetColor(0, 0, 0),
+			TRUE
+		);
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+
 
 	//--------------------------------------------------
 	// 6×6の盤面を描画
@@ -543,23 +665,41 @@ void GameScene::Draw()
 		}
 	}
 
-	//if (m_gameEnd) {
-	//	if (m_winner == PLAYER_MARU) {
-	//		DrawString(
-	//			500,
-	//			50,
-	//			"〇勝ち",
-	//			GetColor(255, 255, 255));
-	//	}
-	//	else {
-	//		DrawString(
-	//			500,
-	//			50,
-	//			"×勝ち",
-	//			GetColor(255, 255, 255));
-	//	}
+	// 残り時間
+	int elapsed = GetNowCount() - m_turnStartTime;
+	int remainTime = 30 - elapsed / 1000;
 
-	//}
+	if (remainTime < 0)
+	{
+		remainTime = 0;
+	}
+
+	char timeText[32];
+	sprintf_s(timeText, "TIME : %d", remainTime);
+
+	// 5秒以下なら赤色
+	int timeColor;
+
+	if (remainTime <= 5)
+	{
+		timeColor = GetColor(255, 0, 0);
+	}
+	else
+	{
+		timeColor = GetColor(255, 255, 255);
+	}
+
+	DrawString(500, 80, timeText, timeColor);
+
+	// 現在のプレイヤー
+	if (m_currentPlayer == PLAYER_MARU)
+	{
+		DrawString(700, 80, "MARU TURN", GetColor(255, 255, 255));
+	}
+	else
+	{
+		DrawString(700, 80, "BATU TURN", GetColor(255, 255, 255));
+	}
 
 	//選択した種類の表示
 	if (m_selectedPiece == MARU_G)

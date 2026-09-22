@@ -49,9 +49,14 @@ private:
 	bool m_gameEnd;
 	Player m_winner;
 
+	int m_turnStartTime;
+
 	//‚Ü‚é‚Æ‚Î‚Â‚ÌF‚ğ¦‚·
 	int m_pieceColor[2];
 
+	int m_lastPlaceArea;
+	int m_maruLastPlaceArea;
+	int m_batuLastPlaceArea;
 
 
 };
