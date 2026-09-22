@@ -17,4 +17,21 @@ public:
 
 private:
     Game* m_game;
+
+    struct MARU_WIN
+    {
+        int image;
+        float x;
+        float y;
+    };
+
+    struct BATU_WIN
+    {
+        int image;
+        float x;
+        float y;
+    };
+
+    MARU_WIN maru_win;
+    BATU_WIN batu_win;
 };

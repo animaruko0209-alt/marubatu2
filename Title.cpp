@@ -26,7 +26,7 @@ void SceneOp::Update()
 	
 	
 	
-	if (CheckHitKey(KEY_INPUT_Z)) {
+	if (CheckHitKey(KEY_INPUT_SPACE)) {
 		
 		next_scene = 1;
 		//ÉQÅ[ÉÄñ{ï“Ç÷
@@ -49,7 +49,7 @@ void SceneOp::Draw()
 	DrawString(350, 90, "ÅõÅ~ÉQÅ[ÉÄ", GetColor(0, 0, 255));
 
 	SetFontSize(32);
-	DrawString(472, 602, "Press  Z Key!!", GetColor(220, 220, 220));
-	DrawString(470, 600, "Press  Z Key!!", GetColor(255, 0, 0));
+	DrawString(472, 602, "Press  SPACE Key!!", GetColor(220, 220, 220));
+	DrawString(470, 600, "Press  SPACE Key!!", GetColor(255, 0, 0));
 
 }
