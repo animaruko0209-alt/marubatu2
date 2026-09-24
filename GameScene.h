@@ -16,8 +16,8 @@ class GameScene : public SceneBase
 
 public:
 
+	
 	GameScene(Game* game);
-
 	void Init() override;
 	void Input() override;
 	void Update() override;
@@ -27,36 +27,38 @@ public:
 private:
 
 	Game* game_ptr;
-	int m_lineColor;
-
 	Board m_board;
 	CircleMove m_circleMove;
 	Player m_currentPlayer;
 	PieceType m_selectedPiece;
 	GameUI m_ui;
-
-	bool m_prevMouseLeft;
-
-	int m_maruCount;
-	int m_batuCount;
-
-	int m_selectedX;
-	int m_selectedY;
-
-	bool m_pieceMoving;
-
-	bool CheckWin(Player player);
-	bool m_gameEnd;
 	Player m_winner;
-
+	//　線の色
+	int m_lineColor;
+	//　マルの置ける数を数える
+	int m_maruCount;
+	//　バツの置ける数を数える
+	int m_batuCount;
+	//　X軸の選んでいるマス
+	int m_selectedX;
+	//　Y軸の選んでいるマス
+	int m_selectedY;
+	//　時間制限
 	int m_turnStartTime;
-
 	//まるとばつの色を示す
 	int m_pieceColor[2];
-
-	int m_lastPlaceArea;
+	//　1ターン前にマルが置いた場所を調べる
 	int m_maruLastPlaceArea;
+	//　1ターン前にバツが置いた場所を調べる
 	int m_batuLastPlaceArea;
+	//　左クリック
+	bool m_prevMouseLeft;
+	bool m_pieceMoving;
+	bool CheckWin(Player player);
+	bool m_gameEnd;
+	
+
+	
 
 
 };

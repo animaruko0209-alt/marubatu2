@@ -9,13 +9,15 @@ GameScene::GameScene(Game* game)
 
 void GameScene::Init()
 {
-	m_lineColor = GetColor(255, 255, 255);
-
 	// 盤面初期化
 	m_board.Init();
 
 	// 駒初期化
 	m_circleMove.Init();
+
+	m_ui.Init();
+
+	m_lineColor = GetColor(255, 255, 255);
 
 	// プレイヤー
 	m_currentPlayer = PLAYER_MARU;
@@ -45,13 +47,11 @@ void GameScene::Init()
 
 	next_scene = -1;
 
-	m_ui.Init();
 
 	//表示カラーは黒
 	m_pieceColor[0] = GetColor(0, 0, 0);
 	m_pieceColor[1] = GetColor(0, 0, 0);
 
-	m_lastPlaceArea = -1;
 	m_maruLastPlaceArea = -1;
 	m_batuLastPlaceArea = -1;
 
