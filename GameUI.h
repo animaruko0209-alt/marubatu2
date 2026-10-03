@@ -29,9 +29,12 @@ public:
 	MARU_UI maru_ui;
 	BATU_UI batu_ui;
 	MOVE_UI move_ui;
+	int MaruCount;
+	int BatuCount;
 	
 	void Init();
 	void Input();
+	void SetPieceCount(int maruCount, int batuCount);
 	void Update();
 	void Draw();
 
