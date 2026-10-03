@@ -34,6 +34,7 @@ void GameUI::Draw() {
 		DrawFillBox(45+i*955, 480, 205+i*955, 830, GetColor(255,255,255));
 	}
 
+	//　移動変更のUI描画（変更してもらって大丈夫です）
 	DrawFillBox(0, 0, 200,300, GetColor(255, 255, 255));
 	DrawString(10, 200, "上下キーで", GetColor(0, 0, 0));
 	DrawString(10, 250, "移動を変更", GetColor(0, 0, 0));
