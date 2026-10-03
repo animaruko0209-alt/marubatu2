@@ -564,7 +564,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-
+	m_ui.SetPieceCount(m_maruCount, m_batuCount);
 	m_ui.Draw();
 
 	//========================================
