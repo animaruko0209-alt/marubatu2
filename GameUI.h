@@ -25,12 +25,25 @@ public:
 		float y;
 	};
 
+	//ëÄçÏ
+	struct OPERATION_UI
+	{
+		int image;
+		float x;
+		float y;
+	};
+
 
 	MARU_UI maru_ui;
 	BATU_UI batu_ui;
 	MOVE_UI move_ui;
 	int MaruCount;
 	int BatuCount;
+
+	//ëÄçÏ
+	OPERATION_UI mouse_ui;
+	OPERATION_UI ud_ui;
+
 	
 	void Init();
 	void Input();

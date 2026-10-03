@@ -12,6 +12,17 @@ void GameUI::Init() {
 	move_ui.y = 0;
 	MaruCount = 0;
 	BatuCount = 0;
+
+	//操作表示
+	mouse_ui.image = LoadGraph("mouse.png");
+	mouse_ui.x = 0.0f;
+	mouse_ui.y = 200.0f;
+	ud_ui.image = LoadGraph("updown.png");
+	ud_ui.x = 100.0f;
+	ud_ui.y = 200.0f;
+
+	//タイトルのフォントサイズ変更が残っているのでそろえる
+	SetFontSize(32);
 }
 
 void GameUI::Input() {
@@ -35,9 +46,12 @@ void GameUI::Draw() {
 	}
 
 	//　移動変更のUI描画（変更してもらって大丈夫です）
-	DrawFillBox(0, 0, 200,300, GetColor(255, 255, 255));
+	/*DrawFillBox(0, 0, 200,300, GetColor(255, 255, 255));
 	DrawString(10, 200, "上下キーで", GetColor(0, 0, 0));
-	DrawString(10, 250, "移動を変更", GetColor(0, 0, 0));
+	DrawString(10, 250, "移動を変更", GetColor(0, 0, 0));*/
+
+	DrawFillBox(0, 0, 200, 350, GetColor(255, 255, 255));
+	DrawString(mouse_ui.x + 10.0f, mouse_ui.y + 100.0f, "Put/Select", GetColor(0, 0, 0));
 
 	char maruText[32];
 	char batuText[32]; 
@@ -54,4 +68,9 @@ void GameUI::Draw() {
 	DrawGraph(maru_ui.x, maru_ui.y, maru_ui.image, true);
 	DrawGraph(batu_ui.x, batu_ui.y, batu_ui.image, true);
 	DrawGraph(move_ui.x,move_ui.y, move_ui.image, true);
+
+	//移動変更、設置操作表示
+	DrawGraph(mouse_ui.x, mouse_ui.y, mouse_ui.image, true);
+	DrawGraph(ud_ui.x, ud_ui.y, ud_ui.image, true);
+	
 }
