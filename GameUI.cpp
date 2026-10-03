@@ -21,6 +21,18 @@ void GameUI::Init() {
 	ud_ui.x = 100.0f;
 	ud_ui.y = 200.0f;
 
+	//選択数表示
+	g_ui.image = LoadGraph("dir(1).png");
+	g_ui.x = 100.0f;
+	g_ui.y = 800.0f;
+	g_ui.m_num = 0;
+	g_ui.b_num = 0;
+	o_ui.image = LoadGraph("dir(2).png");
+	o_ui.x = 100.0f;
+	o_ui.y = 850.0f;
+	o_ui.m_num = 0;
+	o_ui.b_num = 0;
+
 	//タイトルのフォントサイズ変更が残っているのでそろえる
 	SetFontSize(32);
 }
@@ -34,6 +46,37 @@ void GameUI::SetPieceCount(int maruCount, int batuCount) {
 	BatuCount = batuCount;
 }
 
+void GameUI::GOSelectCount(int go, int mb)
+{
+	//g
+	if (go == 1)
+	{
+		//m
+		if (mb == 1)
+		{
+			g_ui.m_num++;
+		}
+		//b
+		else if (mb == 2)
+		{
+			g_ui.b_num++;
+		}
+	}
+	//o
+	if (go == 2)
+	{
+		//m
+		if (mb == 1)
+		{
+			o_ui.m_num++;
+		}
+		//b
+		else if (mb == 2)
+		{
+			o_ui.b_num++;
+		}
+	}
+}
 
 void GameUI::Update() {
 
@@ -72,5 +115,9 @@ void GameUI::Draw() {
 	//移動変更、設置操作表示
 	DrawGraph(mouse_ui.x, mouse_ui.y, mouse_ui.image, true);
 	DrawGraph(ud_ui.x, ud_ui.y, ud_ui.image, true);
+
+	//test
+	DrawFormatString(20, 900, GetColor(255, 255, 0),
+		"test\nmaru:Gx%d,Ox%d\nbatu:Gx%d,Ox%d", g_ui.m_num, o_ui.m_num, g_ui.b_num, o_ui.b_num);
 	
 }

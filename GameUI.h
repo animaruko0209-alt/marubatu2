@@ -33,6 +33,16 @@ public:
 		float y;
 	};
 
+	//選択内訳表示(色別)
+	struct SELECT_UI
+	{
+		int image;
+		float x;
+		float y;
+		//いくつ選択した
+		int m_num;
+		int b_num;
+	};
 
 	MARU_UI maru_ui;
 	BATU_UI batu_ui;
@@ -44,12 +54,18 @@ public:
 	OPERATION_UI mouse_ui;
 	OPERATION_UI ud_ui;
 
-	
+	//移動方向ごとの選択数
+	SELECT_UI g_ui;
+	SELECT_UI o_ui;
+
 	void Init();
 	void Input();
 	void SetPieceCount(int maruCount, int batuCount);
 	void Update();
 	void Draw();
+
+	//選択数を数える
+	void GOSelectCount(int go, int mb);
 
 };
 
