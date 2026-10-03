@@ -79,6 +79,8 @@ void SceneOp::Draw()
     DrawLine(1080, 385, 960, 505,
         GetColor(0, 0, 255), 8);
 
+
+ 
     // タイトルの影
     SetFontSize(102);
     DrawString(352, 257, "○×ゲーム",
