@@ -311,14 +311,14 @@ void GameScene::Update()
 
 					if (m_currentPlayer == PLAYER_MARU)
 					{
-						if (m_maruCount < 7)
+						if (m_maruCount < 5)
 						{
 							canPlace = true;
 						}
 					}
 					else
 					{
-						if (m_batuCount < 7)
+						if (m_batuCount < 5)
 						{
 							canPlace = true;
 						}
