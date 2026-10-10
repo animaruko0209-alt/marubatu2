@@ -60,7 +60,7 @@ void SceneOp::Update()
         if (se_handle != -1)
         {
             ChangeVolumeSoundMem(255, se_handle);
-            PlaySoundMem(se_handle, DX_PLAYTYPE_NORMAL);
+            PlaySoundMem(se_handle, DX_PLAYTYPE_BACK);
         }
         next_scene = 1;
     }
