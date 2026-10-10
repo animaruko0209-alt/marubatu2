@@ -45,7 +45,7 @@ void SceneOp::Update()
             // âπó Çç≈ëÂÇ…Ç∑ÇÈ
             ChangeVolumeSoundMem(255, se_handle);
 
-            PlaySoundMem(se_handle, DX_PLAYTYPE_NORMAL);
+            PlaySoundMem(se_handle, DX_PLAYTYPE_BACK);
 
          
 
