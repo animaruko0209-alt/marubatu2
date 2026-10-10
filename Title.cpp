@@ -8,6 +8,15 @@ void SceneOp::Init()
 {
 	
 	next_scene = -1;
+
+    // 決定SEを読み込む
+    se_handle = LoadSoundMem("start.mp3");
+
+    // キー入力状態を初期化
+    space_prev = false;
+
+    
+
 }
 
 /// <summary>
@@ -23,16 +32,31 @@ void SceneOp::Input()
 /// </summary>
 void SceneOp::Update()
 {
-	
-	
-	
-	if (CheckHitKey(KEY_INPUT_SPACE)) {
-		
-		next_scene = 1;
-		//ゲーム本編へ
-	}
-	
+    
+    // 現在のスペースキー状態
+    bool space_now = CheckHitKey(KEY_INPUT_SPACE);
 
+    // 押した瞬間だけ処理する
+    if (space_now && !space_prev)
+    {
+        // 決定SEを再生
+        if (se_handle != -1)
+        {
+            // 音量を最大にする
+            ChangeVolumeSoundMem(255, se_handle);
+
+            PlaySoundMem(se_handle, DX_PLAYTYPE_NORMAL);
+
+         
+
+        }
+
+        // ゲーム本編へ移動
+       next_scene = 1;
+    }
+
+    // キー状態を保存
+    space_prev = space_now;
 	
 	
 }

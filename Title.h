@@ -14,7 +14,9 @@ class SceneOp : public SceneBase
 	/// </summary>
 	Game* game_ptr;
 
-
+private:
+	int se_handle = -1;       // 決定SEのハンドル
+	bool space_prev = false;  // 前フレームのスペースキー状態
 
 public:
 	/// <summary>
