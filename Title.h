@@ -16,7 +16,9 @@ class SceneOp : public SceneBase
 	bool m_prevMouseLeft;
 	bool m_prevHelpKey;
 
-
+private:
+	int se_handle = -1;       // 決定SEのハンドル
+	bool space_prev = false;  // 前フレームのスペースキー状態
 
 public:
 	/// <summary>

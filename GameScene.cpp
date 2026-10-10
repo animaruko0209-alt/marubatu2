@@ -410,10 +410,14 @@ void GameScene::Update()
 								if (m_selectedPiece == MARU_G)
 								{
 									m_selectedPiece = BATU_G;
+									//緑のマル
+									m_ui.GOSelectCount(1, 1);
 								}
 								else
 								{
 									m_selectedPiece = BATU_O;
+									//オレンジのマル
+									m_ui.GOSelectCount(2, 1);
 								}
 							}
 							else
@@ -428,10 +432,14 @@ void GameScene::Update()
 								if (m_selectedPiece == BATU_G)
 								{
 									m_selectedPiece = MARU_G;
+									//緑のバツ
+									m_ui.GOSelectCount(1, 2);
 								}
 								else
 								{
 									m_selectedPiece = MARU_O;
+									//オレンジのバツ
+									m_ui.GOSelectCount(2, 2);
 								}
 							}
 						}

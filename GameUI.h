@@ -64,7 +64,7 @@ public:
 	void Update();
 	void Draw();
 
-	//‘I‘ğ”‚ğ”‚¦‚é
+	//‘I‘ğ”‚ğ”‚¦‚é(g1,o2,m1,b2)
 	void GOSelectCount(int go, int mb);
 
 };
