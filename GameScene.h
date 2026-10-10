@@ -19,6 +19,7 @@ public:
 	
 	GameScene(Game* game);
 	void Init() override;
+	void Resume(int pauseTime) override;
 	void Input() override;
 	void Update() override;
 	void Draw() override;
@@ -53,6 +54,7 @@ private:
 	int m_batuLastPlaceArea;
 	//　左クリック
 	bool m_prevMouseLeft;
+	bool m_prevHelpKey;
 	bool m_pieceMoving;
 	bool CheckWin(Player player);
 	bool m_gameEnd;

@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include"Game.h"
 #include "DxLib.h"
+#include "ExplanationScene.h"
 
 GameScene::GameScene(Game* game)
 {
@@ -36,6 +37,7 @@ void GameScene::Init()
 
 	// マウス
 	m_prevMouseLeft = false;
+	m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
 
 	m_turnStartTime = GetNowCount();
 
@@ -68,6 +70,13 @@ void GameScene::Init()
 
 }
 
+void GameScene::Resume(int pauseTime)
+{
+    SceneBase::Resume(pauseTime);
+    m_turnStartTime += pauseTime;
+    m_prevMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+    m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
+}
 void GameScene::Input()
 {
 	// G / Oの選択
@@ -248,6 +257,22 @@ void GameScene::Update()
 		next_scene = 2;
 		return;
 	}
+    int helpMouseX, helpMouseY;
+    GetMousePoint(&helpMouseX, &helpMouseY);
+    bool helpMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+    bool helpKey = CheckHitKey(KEY_INPUT_H) != 0;
+    bool helpClick = helpMouseLeft && !m_prevMouseLeft &&
+        ExplanationScene::IsHelpButtonHit(helpMouseX, helpMouseY);
+    bool openHelp = (helpKey && !m_prevHelpKey) || helpClick;
+    m_prevHelpKey = helpKey;
+
+    if (openHelp)
+    {
+        m_prevMouseLeft = helpMouseLeft;
+        next_scene = 3;
+        return;
+    }
+
 	m_ui.Update();
 
 	if (GetNowCount() - m_turnStartTime >= 30000)
@@ -575,6 +600,7 @@ void GameScene::Draw()
 {
 	m_ui.SetPieceCount(m_maruCount, m_batuCount);
 	m_ui.Draw();
+	ExplanationScene::DrawHelpButton();
 
 
 	// マウスカーソルがあるマスを取得

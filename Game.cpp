@@ -5,6 +5,7 @@
 #include "Title.h"
 #include"GameScene.h"
 #include"Result.h"
+#include "ExplanationScene.h"
 #include <memory>
 #include <ctime>
 
@@ -17,6 +18,10 @@ void Game::Game_loop()
     current_scene_ptr = new SceneOp(this);
     current_scene_ptr->Init();
     scene_no = 0;
+    // à–¾‰æ–Ê‚ðŠJ‚¢‚Ä‚¢‚éŠÔ‚ÍŒ³‚ÌƒV[ƒ“‚ð•Û‘¶‚·‚é
+    SceneBase* savedScene = nullptr;
+    int savedSceneNo = 0;
+    int explanationStartTime = 0;
     while (ProcessMessage() == 0)
     {
         // “ü—Í
@@ -27,24 +32,44 @@ void Game::Game_loop()
         int next = current_scene_ptr->GetNextScene();
         if (next != -1)
         {
-            delete current_scene_ptr;
-            current_scene_ptr = nullptr;
-            scene_no = next;
-            switch (scene_no)
+            if (next == 3 && scene_no != 3)
             {
-            case 0:
-                current_scene_ptr = new SceneOp(this);
-                break;
-            case 1:
-                current_scene_ptr = new GameScene(this);
-                break;
-            case 2:
-                current_scene_ptr = new Result(this);
-                break;
-            }
-            if (current_scene_ptr != nullptr)
-            {
+                savedScene = current_scene_ptr;
+                savedSceneNo = scene_no;
+                explanationStartTime = GetNowCount();
+                current_scene_ptr = new ExplanationScene(savedSceneNo);
+                scene_no = 3;
                 current_scene_ptr->Init();
+            }
+            else if (scene_no == 3 && savedScene != nullptr)
+            {
+                delete current_scene_ptr;
+                current_scene_ptr = savedScene;
+                savedScene = nullptr;
+                scene_no = savedSceneNo;
+                current_scene_ptr->Resume(GetNowCount() - explanationStartTime);
+            }
+            else
+            {
+                delete current_scene_ptr;
+                current_scene_ptr = nullptr;
+                scene_no = next;
+                switch (scene_no)
+                {
+                case 0:
+                    current_scene_ptr = new SceneOp(this);
+                    break;
+                case 1:
+                    current_scene_ptr = new GameScene(this);
+                    break;
+                case 2:
+                    current_scene_ptr = new Result(this);
+                    break;
+                }
+                if (current_scene_ptr != nullptr)
+                {
+                    current_scene_ptr->Init();
+                }
             }
         }
         // •`‰æ
@@ -57,4 +82,5 @@ void Game::Game_loop()
     }
     delete current_scene_ptr;
     current_scene_ptr = nullptr;
+    delete savedScene;
 }

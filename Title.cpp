@@ -2,17 +2,26 @@
 #include "Game.h"
 #include "SceneBase.h"
 #include "DxLib.h"
+#include "ExplanationScene.h"
 
 
 void SceneOp::Init()
 {
 	
 	next_scene = -1;
+	m_prevMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+	m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
 }
 
 /// <summary>
 /// ì¸óÕèàóù
 /// </summary>
+void SceneOp::Resume(int pauseTime)
+{
+    SceneBase::Resume(pauseTime);
+    m_prevMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+    m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
+}
 void SceneOp::Input()
 {
 	
@@ -23,6 +32,22 @@ void SceneOp::Input()
 /// </summary>
 void SceneOp::Update()
 {
+    int helpMouseX, helpMouseY;
+    GetMousePoint(&helpMouseX, &helpMouseY);
+    bool helpMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+    bool helpKey = CheckHitKey(KEY_INPUT_H) != 0;
+    bool helpClick = helpMouseLeft && !m_prevMouseLeft &&
+        ExplanationScene::IsHelpButtonHit(helpMouseX, helpMouseY);
+    bool openHelp = (helpKey && !m_prevHelpKey) || helpClick;
+    m_prevHelpKey = helpKey;
+
+    if (openHelp)
+    {
+        m_prevMouseLeft = helpMouseLeft;
+        next_scene = 3;
+        return;
+    }
+    m_prevMouseLeft = helpMouseLeft;
 	
 	
 	
@@ -104,4 +129,5 @@ void SceneOp::Draw()
     }
    
     SetFontSize(32);
+    ExplanationScene::DrawHelpButton();
 }
