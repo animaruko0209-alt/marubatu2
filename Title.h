@@ -13,8 +13,12 @@ class SceneOp : public SceneBase
 	/// Gameインスタンスのポインター
 	/// </summary>
 	Game* game_ptr;
+	bool m_prevMouseLeft;
+	bool m_prevHelpKey;
 
-
+private:
+	int se_handle = -1;       // 決定SEのハンドル
+	bool space_prev = false;  // 前フレームのスペースキー状態
 
 public:
 	/// <summary>
@@ -31,6 +35,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	void Init() override;
+	void Resume(int pauseTime) override;
 
 	/// <summary>
 	/// 入力処理

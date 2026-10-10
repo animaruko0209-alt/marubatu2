@@ -7,6 +7,10 @@ protected:
 
 
 public:
+	virtual ~SceneBase() = default;
+
+	// à–¾‰æ–Ê‚©‚çŒ³‚Ì‰æ–Ê‚Ö–ß‚é
+	virtual void Resume(int pauseTime) { next_scene = -1; }
 
 	/// <summary>
 	/// ‰Šú‰»ˆ—
