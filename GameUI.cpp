@@ -33,6 +33,20 @@ void GameUI::Init() {
 	o_ui.m_num = 0;
 	o_ui.b_num = 0;
 
+	//選択方向表示（Rect用）
+	//※画像の名前は元の駒数のなごり
+	sd_image = LoadGraph("seven_icon3x3.png");
+	sd_now = 0;
+	for (int sd = 0; sd < 3; sd++)
+	{
+		sd_ui[sd].size = 100;
+		sd_ui[sd].start_x = sd_ui[sd].size * sd;
+		sd_ui[sd].start_y = 0;
+		sd_ui[sd].now = 0;
+		sd_ui[sd].frame = 0;
+		sd_ui[sd].move_end = true;
+	}
+
 	//タイトルのフォントサイズ変更が残っているのでそろえる
 	SetFontSize(32);
 }
@@ -79,7 +93,11 @@ void GameUI::GOSelectCount(int go, int mb)
 }
 
 void GameUI::Update() {
-
+	//選択方向画像の内部座標更新
+	for (int sd = 0; sd < 3; sd++)
+	{
+		sd_ui[sd].start_y = sd_ui[sd].size * sd_ui[sd].now;
+	}
 }
 
 
@@ -132,8 +150,80 @@ void GameUI::Draw() {
 	DrawFormatString(1005, 700, MB_GREEN, "　　   %d", g_ui.b_num);
 	DrawFormatString(1005, 770, MB_ORANGE, "　　   %d", o_ui.b_num);
 
+	//
+	DrawRectRotaGraph(20, 900, sd_ui[sd_now].start_x, sd_ui[sd_now].start_y, sd_ui[sd_now].size, sd_ui[sd_now].size, 0.5, 0.0, sd_image, true);
+
 	////test
 	//DrawFormatString(20, 900, GetColor(255, 255, 0),
 	//	"test\nmaru:G %d,O %d\nbatu:G %d,O %d", g_ui.m_num, o_ui.m_num, g_ui.b_num, o_ui.b_num);
 	
+}
+
+//選択方向をアニメーション（g1,o2,動作の向きを逆にするか）
+void GameUI::MoveSelectDir(int go, bool mov_rev)
+{
+	const int frame_max = 10;
+	if (go >= 0 && go < 3)
+	{
+		//セット
+		sd_now = go;
+		//反対の挙動
+		if (mov_rev)
+		{
+			//動かすタイミングのカウント
+			sd_ui[go].frame++;
+			if (sd_ui[go].frame >= frame_max)
+			{
+				sd_ui[go].frame = 0;
+				//減る
+				sd_ui[go].now--;
+				if (sd_ui[go].now <= 0)
+				{
+					//停止
+					sd_ui[go].now = 0;
+					sd_ui[go].move_end = true;
+				}
+			}
+			else
+			{
+				sd_ui[go].move_end = false;
+			}
+		}
+		//通常
+		else
+		{
+			//動かすタイミングのカウント
+			sd_ui[go].frame++;
+			if (sd_ui[go].frame >= frame_max)
+			{
+				sd_ui[go].frame = 0;
+				//増える
+				sd_ui[go].now++;
+				if (sd_ui[go].now >= 3 - 1)
+				{
+					//停止
+					sd_ui[go].now = 3 - 1;
+					sd_ui[go].move_end = true;
+				}
+				else
+				{
+					sd_ui[go].move_end = false;
+				}
+			}
+		}
+	}
+}
+void GameUI::MoveSelectDir(int go, int a3)
+{
+	if (go >= 0 && go < 3)
+	{
+		sd_now = go;
+		sd_ui[go].now = a3;
+	}
+}
+
+//動作状況
+bool GameUI::JudgeSD()
+{
+	return sd_ui[sd_now].move_end;
 }

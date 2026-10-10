@@ -47,6 +47,8 @@ private:
 	int m_turnStartTime;
 	//まるとばつの色を示す
 	int m_pieceColor[2];
+	
+
 	//　1ターン前にマルが置いた場所を調べる
 	int m_maruLastPlaceArea;
 	//　1ターン前にバツが置いた場所を調べる
