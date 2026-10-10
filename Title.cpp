@@ -7,10 +7,13 @@
 
 void SceneOp::Init()
 {
-	
-	next_scene = -1;
-	m_prevMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
-	m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
+    next_scene = -1;
+    m_prevMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
+    m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
+
+    // 開始SEとキーの状態を初期化
+    se_handle = LoadSoundMem("start.mp3");
+    space_prev = false;
 }
 
 /// <summary>
@@ -21,6 +24,7 @@ void SceneOp::Resume(int pauseTime)
     SceneBase::Resume(pauseTime);
     m_prevMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
     m_prevHelpKey = CheckHitKey(KEY_INPUT_H) != 0;
+    space_prev = CheckHitKey(KEY_INPUT_SPACE) != 0;
 }
 void SceneOp::Input()
 {
@@ -36,30 +40,31 @@ void SceneOp::Update()
     GetMousePoint(&helpMouseX, &helpMouseY);
     bool helpMouseLeft = (GetMouseInput() & MOUSE_INPUT_LEFT) != 0;
     bool helpKey = CheckHitKey(KEY_INPUT_H) != 0;
+    bool space_now = CheckHitKey(KEY_INPUT_SPACE) != 0;
     bool helpClick = helpMouseLeft && !m_prevMouseLeft &&
         ExplanationScene::IsHelpButtonHit(helpMouseX, helpMouseY);
     bool openHelp = (helpKey && !m_prevHelpKey) || helpClick;
     m_prevHelpKey = helpKey;
+    m_prevMouseLeft = helpMouseLeft;
 
     if (openHelp)
     {
-        m_prevMouseLeft = helpMouseLeft;
+        space_prev = space_now;
         next_scene = 3;
         return;
     }
-    m_prevMouseLeft = helpMouseLeft;
-	
-	
-	
-	if (CheckHitKey(KEY_INPUT_SPACE)) {
-		
-		next_scene = 1;
-		//ゲーム本編へ
-	}
-	
 
-	
-	
+    // スペースキーを押した瞬間にSEを鳴らしてゲームを開始
+    if (space_now && !space_prev)
+    {
+        if (se_handle != -1)
+        {
+            ChangeVolumeSoundMem(255, se_handle);
+            PlaySoundMem(se_handle, DX_PLAYTYPE_NORMAL);
+        }
+        next_scene = 1;
+    }
+    space_prev = space_now;
 }
 
 /// <summary>
