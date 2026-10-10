@@ -116,6 +116,13 @@ void GameUI::Draw() {
 	DrawGraph(mouse_ui.x, mouse_ui.y, mouse_ui.image, true);
 	DrawGraph(ud_ui.x, ud_ui.y, ud_ui.image, true);
 
+	//サイズ
+	const float MINI_DIR = 200.0f * 0.3f;
+	const int FONT_HALF = 32 / 2;
+	DrawRotaGraph(55+(int)MINI_DIR/2, 700+ FONT_HALF, 0.3, 0.0, g_ui.image, true);
+	DrawRotaGraph(55+(int)MINI_DIR/2, 770+ FONT_HALF, 0.3, 0.0, o_ui.image, true);
+	DrawRotaGraph(1005+(int)MINI_DIR/2, 700+ FONT_HALF, 0.3, 0.0, g_ui.image, true);
+	DrawRotaGraph(1005+(int)MINI_DIR/2, 770+ FONT_HALF, 0.3, 0.0, o_ui.image, true);
 	//色
 	const int MB_GREEN = GetColor(50, 200, 70);
 	const int MB_ORANGE = GetColor(255, 150, 0);
