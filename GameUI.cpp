@@ -116,8 +116,24 @@ void GameUI::Draw() {
 	DrawGraph(mouse_ui.x, mouse_ui.y, mouse_ui.image, true);
 	DrawGraph(ud_ui.x, ud_ui.y, ud_ui.image, true);
 
-	//test
-	DrawFormatString(20, 900, GetColor(255, 255, 0),
-		"test\nmaru:Gx%d,Ox%d\nbatu:Gx%d,Ox%d", g_ui.m_num, o_ui.m_num, g_ui.b_num, o_ui.b_num);
+	//サイズ
+	const float MINI_DIR = 200.0f * 0.3f;
+	const int FONT_HALF = 32 / 2;
+	DrawRotaGraph(55+(int)MINI_DIR/2, 700+ FONT_HALF, 0.3, 0.0, g_ui.image, true);
+	DrawRotaGraph(55+(int)MINI_DIR/2, 770+ FONT_HALF, 0.3, 0.0, o_ui.image, true);
+	DrawRotaGraph(1005+(int)MINI_DIR/2, 700+ FONT_HALF, 0.3, 0.0, g_ui.image, true);
+	DrawRotaGraph(1005+(int)MINI_DIR/2, 770+ FONT_HALF, 0.3, 0.0, o_ui.image, true);
+	//色
+	const int MB_GREEN = GetColor(50, 200, 70);
+	const int MB_ORANGE = GetColor(255, 150, 0);
+	DrawFormatString(55, 700, MB_GREEN, "　　   %d", g_ui.m_num);
+	DrawFormatString(55, 770, MB_ORANGE, "　　   %d", o_ui.m_num);
+
+	DrawFormatString(1005, 700, MB_GREEN, "　　   %d", g_ui.b_num);
+	DrawFormatString(1005, 770, MB_ORANGE, "　　   %d", o_ui.b_num);
+
+	////test
+	//DrawFormatString(20, 900, GetColor(255, 255, 0),
+	//	"test\nmaru:G %d,O %d\nbatu:G %d,O %d", g_ui.m_num, o_ui.m_num, g_ui.b_num, o_ui.b_num);
 	
 }

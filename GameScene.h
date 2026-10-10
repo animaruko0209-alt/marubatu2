@@ -56,7 +56,7 @@ private:
 	bool m_pieceMoving;
 	bool CheckWin(Player player);
 	bool m_gameEnd;
-	
+	int m_cell[LINE_NUM - 1][LINE_NUM - 1];
 
 	
 

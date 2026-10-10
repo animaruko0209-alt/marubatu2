@@ -16,6 +16,15 @@ void GameScene::Init()
 	m_circleMove.Init();
 
 	m_ui.Init();
+	
+	// マスの初期化
+	for (int y = 0; y < LINE_NUM - 1; y++)
+	{
+		for (int x = 0; x < LINE_NUM - 1; x++)
+		{
+			m_cell[y][x] = NONE;
+		}
+	}
 
 	m_lineColor = GetColor(255, 255, 255);
 
@@ -376,10 +385,14 @@ void GameScene::Update()
 								if (m_selectedPiece == MARU_G)
 								{
 									m_selectedPiece = BATU_G;
+									//緑のマル
+									m_ui.GOSelectCount(1, 1);
 								}
 								else
 								{
 									m_selectedPiece = BATU_O;
+									//オレンジのマル
+									m_ui.GOSelectCount(2, 1);
 								}
 							}
 							else
@@ -394,10 +407,14 @@ void GameScene::Update()
 								if (m_selectedPiece == BATU_G)
 								{
 									m_selectedPiece = MARU_G;
+									//緑のバツ
+									m_ui.GOSelectCount(1, 2);
 								}
 								else
 								{
 									m_selectedPiece = MARU_O;
+									//オレンジのバツ
+									m_ui.GOSelectCount(2, 2);
 								}
 							}
 						}
@@ -567,6 +584,80 @@ void GameScene::Draw()
 	m_ui.SetPieceCount(m_maruCount, m_batuCount);
 	m_ui.Draw();
 
+
+	// マウスカーソルがあるマスを取得
+	int mouseX, mouseY;
+	GetMousePoint(&mouseX, &mouseY);
+
+	if (mouseX >= 270 && mouseX < 270 + LINE_WIDTH * 6 &&
+		mouseY >= 170 && mouseY < 170 + LINE_WIDTH * 6)
+	{
+		int cellX = (mouseX - 270) / LINE_WIDTH;
+		int cellY = (mouseY - 170) / LINE_WIDTH;
+
+		// 自分の駒は移動用に選択できる
+		PieceType piece = m_board.GetPiece(cellX, cellY);
+		bool isOwnPiece = false;
+
+		if (m_currentPlayer == PLAYER_MARU)
+		{
+			if (piece == MARU_G || piece == MARU_O)
+			{
+				isOwnPiece = true;
+			}
+		}
+		else
+		{
+			if (piece == BATU_G || piece == BATU_O)
+			{
+				isOwnPiece = true;
+			}
+		}
+
+		// マスが空いているか
+		bool canPlace = !m_pieceMoving && m_board.IsEmpty(cellX, cellY);
+
+		// 現在のプレイヤーの駒数を確認
+		if (m_currentPlayer == PLAYER_MARU)
+		{
+			canPlace = canPlace && (m_maruCount < 5);
+		}
+		else
+		{
+			canPlace = canPlace && (m_batuCount < 5);
+		}
+
+		// 直前に駒を置いた3×3エリアを確認
+		int areaX = cellX / 3;
+		int areaY = cellY / 3;
+		int area = areaY * 2 + areaX;
+
+		int lastPlaceArea =
+			(m_currentPlayer == PLAYER_MARU)
+			? m_maruLastPlaceArea
+			: m_batuLastPlaceArea;
+
+		if (area == lastPlaceArea)
+		{
+			canPlace = false;
+		}
+
+		// 置けるマスと選択できる自分の駒を強調表示
+		if (canPlace || isOwnPiece)
+		{
+			int left = 270 + cellX * LINE_WIDTH;
+			int top = 170 + cellY * LINE_WIDTH;
+			int right = left + LINE_WIDTH;
+			int bottom = top + LINE_WIDTH;
+
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+			DrawBox(
+				left, top, right, bottom,
+				GetColor(255, 230, 80), TRUE
+			);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+	}
 	//========================================
    // 新しく駒を置けない3×3エリアを薄灰色にする
    //========================================
@@ -604,6 +695,36 @@ void GameScene::Draw()
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
+
+	// 選択した駒が移動できるマスを表示
+	if (m_pieceMoving)
+	{
+		for (int y = 0; y < BOARD_SIZE; y++)
+		{
+			for (int x = 0; x < BOARD_SIZE; x++)
+			{
+				int resultX;
+				int resultY;
+
+				if (m_board.IsEmpty(x, y) &&
+					m_board.GetMovePosition(
+						m_selectedX, m_selectedY,
+						x, y, resultX, resultY, m_circleMove) &&
+					resultX == x && resultY == y)
+				{
+					int left = 270 + x * LINE_WIDTH;
+					int top = 170 + y * LINE_WIDTH;
+
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+					DrawBox(
+						left, top, left + LINE_WIDTH, top + LINE_WIDTH,
+						GetColor(80, 200, 255), TRUE
+					);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				}
+			}
+		}
+	}
 
 	//--------------------------------------------------
 	// 6×6の盤面を描画
